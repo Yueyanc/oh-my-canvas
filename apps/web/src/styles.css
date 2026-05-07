@@ -4,9 +4,9 @@
 
 @layer base {
   :root {
-    --radar-canvas: 60 33% 97%;
+    --radar-canvas: 48 42% 95%;
     --radar-surface: 0 0% 100%;
-    --radar-surface-soft: 58 24% 95%;
+    --radar-surface-soft: 48 30% 93%;
     --radar-ink: 84 8% 13%;
     --radar-ink-soft: 78 5% 45%;
     --radar-ink-muted: 75 5% 63%;
@@ -52,6 +52,12 @@
 
   * {
     @apply border-border;
+  }
+
+  html,
+  body,
+  #root {
+    min-height: 100%;
   }
 
   html {
