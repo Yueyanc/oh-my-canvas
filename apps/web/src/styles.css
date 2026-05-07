@@ -83,3 +83,23 @@
     font: inherit;
   }
 }
+
+@layer utilities {
+  .login-field {
+    background:
+      linear-gradient(115deg, hsl(var(--radar-surface) / 0.54), transparent 36%),
+      radial-gradient(circle at 48% 42%, hsl(var(--radar-lime) / 0.2), transparent 28%),
+      repeating-linear-gradient(
+        90deg,
+        hsl(var(--radar-line) / 0.18) 0 1px,
+        transparent 1px 72px
+      ),
+      repeating-linear-gradient(
+        0deg,
+        hsl(var(--radar-line) / 0.13) 0 1px,
+        transparent 1px 72px
+      );
+    mask-image: radial-gradient(circle at center, black, transparent 72%);
+  }
+
+}
