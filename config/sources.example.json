@@ -1,0 +1,104 @@
+{
+  "rules": {
+    "keywords": [
+      "ai",
+      "agent",
+      "open source",
+      "typescript",
+      "bun",
+      "sqlite"
+    ],
+    "blocklist": [
+      "sponsored",
+      "giveaway"
+    ],
+    "sourceWeights": {
+      "rss": 4,
+      "github": 7,
+      "hackernews": 6,
+      "newsnow": 8
+    }
+  },
+  "sources": [
+    {
+      "id": "newsnow-zhihu",
+      "type": "newsnow",
+      "name": "知乎",
+      "enabled": true,
+      "query": "zhihu",
+      "weight": 8
+    },
+    {
+      "id": "newsnow-baidu",
+      "type": "newsnow",
+      "name": "百度",
+      "enabled": true,
+      "query": "baidu",
+      "weight": 8
+    },
+    {
+      "id": "newsnow-douyin",
+      "type": "newsnow",
+      "name": "抖音",
+      "enabled": false,
+      "query": "douyin",
+      "weight": 7
+    },
+    {
+      "id": "newsnow-bilibili",
+      "type": "newsnow",
+      "name": "Bilibili",
+      "enabled": false,
+      "query": "bilibili",
+      "weight": 7
+    },
+    {
+      "id": "newsnow-toutiao",
+      "type": "newsnow",
+      "name": "头条",
+      "enabled": false,
+      "query": "toutiao",
+      "weight": 7
+    },
+    {
+      "id": "newsnow-thepaper",
+      "type": "newsnow",
+      "name": "澎湃",
+      "enabled": false,
+      "query": "thepaper",
+      "weight": 6
+    },
+    {
+      "id": "newsnow-ithome",
+      "type": "newsnow",
+      "name": "IT之家",
+      "enabled": false,
+      "query": "ithome",
+      "weight": 6
+    },
+    {
+      "id": "hn-ai",
+      "type": "hackernews",
+      "name": "Hacker News AI",
+      "enabled": true,
+      "query": "AI agent",
+      "weight": 8
+    },
+    {
+      "id": "github-bun",
+      "type": "github",
+      "name": "GitHub Bun Projects",
+      "enabled": true,
+      "query": "bun sqlite language:typescript",
+      "weight": 7
+    },
+    {
+      "id": "vercel-blog",
+      "type": "rss",
+      "name": "Vercel Blog",
+      "enabled": true,
+      "url": "https://vercel.com/blog/rss.xml",
+      "weight": 4
+    }
+  ]
+}

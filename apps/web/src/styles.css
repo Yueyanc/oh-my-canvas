@@ -1,0 +1,79 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --radar-canvas: 60 33% 97%;
+    --radar-surface: 0 0% 100%;
+    --radar-surface-soft: 58 24% 95%;
+    --radar-ink: 84 8% 13%;
+    --radar-ink-soft: 78 5% 45%;
+    --radar-ink-muted: 75 5% 63%;
+    --radar-line: 60 12% 86%;
+    --radar-line-strong: 65 8% 76%;
+    --radar-lime: 73 100% 72%;
+    --radar-lime-ink: 82 18% 12%;
+    --radar-blue: 217 100% 92%;
+    --radar-blue-ink: 212 55% 35%;
+    --radar-purple: 264 100% 92%;
+    --radar-purple-ink: 265 45% 34%;
+    --radar-pink: 318 100% 91%;
+    --radar-pink-ink: 322 42% 36%;
+    --radar-yellow: 59 100% 88%;
+    --radar-yellow-ink: 53 36% 31%;
+    --radar-danger: 4 65% 45%;
+    --radar-danger-ink: 60 33% 97%;
+    --radar-shadow-card: 0 12px 36px rgb(35 38 32 / 0.06);
+    --radar-shadow-popover: 0 18px 56px rgb(35 38 32 / 0.12);
+    --radar-radius-control: 0.75rem;
+    --radar-radius-card: 1.625rem;
+    --radar-radius-panel: 1.875rem;
+
+    --background: var(--radar-canvas);
+    --foreground: var(--radar-ink);
+    --card: var(--radar-surface);
+    --card-foreground: var(--radar-ink);
+    --primary: var(--radar-ink);
+    --primary-foreground: var(--radar-lime);
+    --secondary: var(--radar-surface-soft);
+    --secondary-foreground: var(--radar-ink);
+    --muted: var(--radar-surface-soft);
+    --muted-foreground: var(--radar-ink-soft);
+    --accent: var(--radar-lime);
+    --accent-foreground: var(--radar-lime-ink);
+    --destructive: var(--radar-danger);
+    --destructive-foreground: var(--radar-danger-ink);
+    --border: var(--radar-line);
+    --input: var(--radar-line);
+    --ring: var(--radar-lime);
+    --radius: var(--radar-radius-control);
+  }
+
+  * {
+    @apply border-border;
+  }
+
+  html {
+    text-rendering: optimizeLegibility;
+  }
+
+  body {
+    @apply m-0 bg-background text-foreground antialiased;
+    font-family:
+      "Inter", "SF Pro Display", "SF Pro Text", "Segoe UI Variable", "Segoe UI", ui-sans-serif,
+      system-ui, -apple-system, BlinkMacSystemFont,
+      sans-serif;
+    font-feature-settings:
+      "cv02" 1,
+      "cv03" 1,
+      "cv04" 1,
+      "ss01" 1;
+  }
+
+  button,
+  input,
+  select {
+    font: inherit;
+  }
+}

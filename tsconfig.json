@@ -1,0 +1,22 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "strict": true,
+    "skipLibCheck": true,
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "jsx": "react-jsx",
+    "baseUrl": ".",
+    "paths": {
+      "@information/core": ["packages/core/src/index.ts"],
+      "@information/core/*": ["packages/core/src/*"],
+      "@information/db": ["packages/db/src/index.ts"],
+      "@information/db/*": ["packages/db/src/*"],
+      "@information/logger": ["packages/logger/src/index.ts"],
+      "@information/logger/*": ["packages/logger/src/*"]
+    }
+  },
+  "include": ["apps", "packages", "drizzle.config.ts"]
+}
