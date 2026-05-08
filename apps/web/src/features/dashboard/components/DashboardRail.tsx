@@ -4,7 +4,6 @@ import {
   DeliveryBox01Icon,
   InboxIcon,
   PackageIcon,
-  Radar02Icon,
   Settings02Icon,
   Shield01Icon,
   WalletCardsIcon
@@ -33,9 +32,7 @@ export function DashboardRail({ isExpanded }: { isExpanded: boolean }) {
             : "pointer-events-none flex h-14 w-14 items-center justify-center text-radar-ink-soft opacity-0 transition-opacity duration-150 ease-out"
         }
       >
-        <span className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full border border-radar-line bg-radar-surface shadow-card">
-          <HugeiconsIcon icon={Radar02Icon} className="h-7 w-7 shrink-0" />
-        </span>
+        <span className="h-14 w-14 shrink-0" />
       </div>
 
       <nav className="mt-10 flex flex-1 flex-col gap-3">

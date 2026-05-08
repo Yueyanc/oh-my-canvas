@@ -3,14 +3,14 @@ import type { Context } from "hono";
 
 const sessionCookie = "information_session";
 const sessionTtlSeconds = 7 * 24 * 60 * 60;
-const sessions = new Map<string, { username: string; expiresAt: number }>();
+const sessions = new Map<string, { userId: string; username: string; expiresAt: number }>();
 
 export const authUsername = process.env.AUTH_USERNAME ?? process.env.ADMIN_USERNAME ?? "admin";
 export const authPassword = process.env.AUTH_PASSWORD ?? process.env.ADMIN_PASSWORD ?? "admin123";
 
-export function createSession(c: Context, username: string) {
+export function createSession(c: Context, user: { id: string; username: string }) {
   const token = crypto.randomUUID();
-  sessions.set(token, { username, expiresAt: Date.now() + sessionTtlSeconds * 1000 });
+  sessions.set(token, { userId: user.id, username: user.username, expiresAt: Date.now() + sessionTtlSeconds * 1000 });
   setCookie(c, sessionCookie, token, {
     httpOnly: true,
     maxAge: sessionTtlSeconds,

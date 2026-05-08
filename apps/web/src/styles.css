@@ -1,6 +1,54 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+
+@source "./";
+@source "../index.html";
+
+@theme inline {
+  --color-border: hsl(var(--border));
+  --color-input: hsl(var(--input));
+  --color-ring: hsl(var(--ring));
+  --color-background: hsl(var(--background));
+  --color-foreground: hsl(var(--foreground));
+  --color-primary: hsl(var(--primary));
+  --color-primary-foreground: hsl(var(--primary-foreground));
+  --color-secondary: hsl(var(--secondary));
+  --color-secondary-foreground: hsl(var(--secondary-foreground));
+  --color-muted: hsl(var(--muted));
+  --color-muted-foreground: hsl(var(--muted-foreground));
+  --color-accent: hsl(var(--accent));
+  --color-accent-foreground: hsl(var(--accent-foreground));
+  --color-destructive: hsl(var(--destructive));
+  --color-destructive-foreground: hsl(var(--destructive-foreground));
+  --color-card: hsl(var(--card));
+  --color-card-foreground: hsl(var(--card-foreground));
+  --color-radar-canvas: hsl(var(--radar-canvas));
+  --color-radar-surface: hsl(var(--radar-surface));
+  --color-radar-surface-soft: hsl(var(--radar-surface-soft));
+  --color-radar-ink: hsl(var(--radar-ink));
+  --color-radar-ink-soft: hsl(var(--radar-ink-soft));
+  --color-radar-ink-muted: hsl(var(--radar-ink-muted));
+  --color-radar-line: hsl(var(--radar-line));
+  --color-radar-line-strong: hsl(var(--radar-line-strong));
+  --color-radar-lime: hsl(var(--radar-lime));
+  --color-radar-lime-ink: hsl(var(--radar-lime-ink));
+  --color-radar-blue: hsl(var(--radar-blue));
+  --color-radar-blue-ink: hsl(var(--radar-blue-ink));
+  --color-radar-purple: hsl(var(--radar-purple));
+  --color-radar-purple-ink: hsl(var(--radar-purple-ink));
+  --color-radar-pink: hsl(var(--radar-pink));
+  --color-radar-pink-ink: hsl(var(--radar-pink-ink));
+  --color-radar-yellow: hsl(var(--radar-yellow));
+  --color-radar-yellow-ink: hsl(var(--radar-yellow-ink));
+  --radius-lg: var(--radius);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-control: var(--radar-radius-control);
+  --radius-card: var(--radar-radius-card);
+  --radius-panel: var(--radar-radius-panel);
+  --shadow-claude: var(--radar-shadow-card);
+  --shadow-card: var(--radar-shadow-card);
+  --shadow-popover: var(--radar-shadow-popover);
+}
 
 @layer base {
   :root {
@@ -50,6 +98,156 @@
     --radius: var(--radar-radius-control);
   }
 
+  .dark {
+    --radar-canvas: 84 10% 8%;
+    --radar-surface: 82 9% 13%;
+    --radar-surface-soft: 82 8% 18%;
+    --radar-ink: 58 34% 94%;
+    --radar-ink-soft: 62 14% 72%;
+    --radar-ink-muted: 68 9% 58%;
+    --radar-line: 78 8% 24%;
+    --radar-line-strong: 76 8% 34%;
+    --radar-lime: 73 100% 72%;
+    --radar-lime-ink: 82 18% 12%;
+    --radar-blue: 205 36% 24%;
+    --radar-blue-ink: 204 72% 80%;
+    --radar-purple: 264 30% 24%;
+    --radar-purple-ink: 264 78% 83%;
+    --radar-pink: 318 32% 24%;
+    --radar-pink-ink: 318 75% 82%;
+    --radar-yellow: 55 34% 24%;
+    --radar-yellow-ink: 56 88% 82%;
+    --radar-danger: 4 70% 60%;
+    --radar-danger-ink: 60 33% 97%;
+    --radar-shadow-card: 0 14px 42px rgb(0 0 0 / 0.28);
+    --radar-shadow-popover: 0 22px 70px rgb(0 0 0 / 0.38);
+
+    --background: var(--radar-canvas);
+    --foreground: var(--radar-ink);
+    --card: var(--radar-surface);
+    --card-foreground: var(--radar-ink);
+    --primary: var(--radar-lime);
+    --primary-foreground: var(--radar-lime-ink);
+    --secondary: var(--radar-surface-soft);
+    --secondary-foreground: var(--radar-ink);
+    --muted: var(--radar-surface-soft);
+    --muted-foreground: var(--radar-ink-soft);
+    --accent: var(--radar-lime);
+    --accent-foreground: var(--radar-lime-ink);
+    --destructive: var(--radar-danger);
+    --destructive-foreground: var(--radar-danger-ink);
+    --border: var(--radar-line);
+    --input: var(--radar-line);
+    --ring: var(--radar-lime);
+  }
+
+  :root[data-theme="sage"] {
+    --radar-canvas: 82 34% 93%;
+    --radar-surface: 70 38% 98%;
+    --radar-surface-soft: 83 30% 88%;
+    --radar-ink: 92 12% 16%;
+    --radar-ink-soft: 92 8% 42%;
+    --radar-ink-muted: 92 7% 58%;
+    --radar-line: 88 18% 78%;
+    --radar-line-strong: 86 16% 67%;
+    --radar-lime: 78 100% 68%;
+    --radar-lime-ink: 90 22% 12%;
+    --radar-shadow-card: 0 12px 36px rgb(44 58 37 / 0.08);
+    --radar-shadow-popover: 0 18px 56px rgb(44 58 37 / 0.14);
+  }
+
+  :root[data-theme="sage"].dark {
+    --radar-canvas: 96 14% 10%;
+    --radar-surface: 96 12% 15%;
+    --radar-surface-soft: 96 11% 20%;
+    --radar-ink: 76 32% 92%;
+    --radar-ink-soft: 82 14% 72%;
+    --radar-ink-muted: 84 10% 58%;
+    --radar-line: 96 10% 26%;
+    --radar-line-strong: 96 10% 36%;
+    --radar-lime: 78 100% 68%;
+    --radar-lime-ink: 90 22% 12%;
+    --radar-shadow-card: 0 14px 42px rgb(0 0 0 / 0.26);
+    --radar-shadow-popover: 0 22px 70px rgb(0 0 0 / 0.36);
+
+    --primary: var(--radar-lime);
+    --primary-foreground: var(--radar-lime-ink);
+  }
+
+  :root[data-theme="ocean"] {
+    --radar-canvas: 198 34% 93%;
+    --radar-surface: 196 38% 98%;
+    --radar-surface-soft: 196 28% 88%;
+    --radar-ink: 204 22% 15%;
+    --radar-ink-soft: 204 12% 42%;
+    --radar-ink-muted: 204 10% 59%;
+    --radar-line: 196 20% 78%;
+    --radar-line-strong: 198 18% 66%;
+    --radar-lime: 73 100% 72%;
+    --radar-lime-ink: 82 18% 12%;
+    --radar-shadow-card: 0 12px 36px rgb(36 58 66 / 0.08);
+    --radar-shadow-popover: 0 18px 56px rgb(36 58 66 / 0.14);
+  }
+
+  :root[data-theme="ocean"].dark {
+    --radar-canvas: 204 20% 10%;
+    --radar-surface: 204 17% 15%;
+    --radar-surface-soft: 204 15% 21%;
+    --radar-ink: 198 30% 92%;
+    --radar-ink-soft: 198 16% 72%;
+    --radar-ink-muted: 198 12% 58%;
+    --radar-line: 204 14% 27%;
+    --radar-line-strong: 204 14% 38%;
+    --radar-lime: 73 100% 72%;
+    --radar-lime-ink: 82 18% 12%;
+    --radar-blue: 205 36% 24%;
+    --radar-blue-ink: 204 72% 80%;
+    --radar-shadow-card: 0 14px 42px rgb(0 0 0 / 0.26);
+    --radar-shadow-popover: 0 22px 70px rgb(0 0 0 / 0.36);
+
+    --primary: var(--radar-lime);
+    --primary-foreground: var(--radar-lime-ink);
+  }
+
+  :root[data-theme="dusk"] {
+    --radar-canvas: 268 32% 94%;
+    --radar-surface: 0 0% 100%;
+    --radar-surface-soft: 268 24% 91%;
+    --radar-ink: 268 18% 16%;
+    --radar-ink-soft: 268 10% 44%;
+    --radar-ink-muted: 268 8% 62%;
+    --radar-line: 268 16% 82%;
+    --radar-line-strong: 268 14% 70%;
+    --radar-lime: 73 100% 72%;
+    --radar-lime-ink: 82 18% 12%;
+    --radar-purple: 276 100% 92%;
+    --radar-purple-ink: 276 45% 34%;
+    --radar-shadow-card: 0 12px 36px rgb(50 38 68 / 0.08);
+    --radar-shadow-popover: 0 18px 56px rgb(50 38 68 / 0.14);
+  }
+
+  :root[data-theme="dusk"].dark {
+    --radar-canvas: 264 16% 11%;
+    --radar-surface: 264 13% 16%;
+    --radar-surface-soft: 264 12% 22%;
+    --radar-ink: 58 32% 93%;
+    --radar-ink-soft: 264 14% 74%;
+    --radar-ink-muted: 264 10% 60%;
+    --radar-line: 264 12% 28%;
+    --radar-line-strong: 264 12% 38%;
+    --radar-lime: 73 100% 72%;
+    --radar-lime-ink: 82 18% 12%;
+    --radar-blue: 248 28% 25%;
+    --radar-blue-ink: 246 84% 84%;
+    --radar-purple: 276 32% 26%;
+    --radar-purple-ink: 276 84% 84%;
+    --radar-shadow-card: 0 14px 42px rgb(0 0 0 / 0.24);
+    --radar-shadow-popover: 0 22px 70px rgb(0 0 0 / 0.34);
+
+    --primary: var(--radar-lime);
+    --primary-foreground: var(--radar-lime-ink);
+  }
+
   * {
     @apply border-border;
   }
@@ -62,6 +260,20 @@
 
   html {
     text-rendering: optimizeLegibility;
+  }
+
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
+    animation: none;
+    mix-blend-mode: normal;
+  }
+
+  :root[data-theme-transition="expand"]::view-transition-old(root) {
+    z-index: 1;
+  }
+
+  :root[data-theme-transition="expand"]::view-transition-new(root) {
+    z-index: 9999;
   }
 
   body {
@@ -87,19 +299,20 @@
 @layer utilities {
   .login-field {
     background:
-      linear-gradient(115deg, hsl(var(--radar-surface) / 0.54), transparent 36%),
-      radial-gradient(circle at 48% 42%, hsl(var(--radar-lime) / 0.2), transparent 28%),
+      linear-gradient(115deg, hsl(var(--radar-surface) / 0.08), transparent 38%),
+      radial-gradient(circle at 50% 42%, hsl(var(--radar-surface) / 0.02), transparent 34%),
       repeating-linear-gradient(
         90deg,
-        hsl(var(--radar-line) / 0.18) 0 1px,
+        hsl(var(--radar-line) / 0.11) 0 1px,
         transparent 1px 72px
       ),
       repeating-linear-gradient(
         0deg,
-        hsl(var(--radar-line) / 0.13) 0 1px,
+        hsl(var(--radar-line) / 0.08) 0 1px,
         transparent 1px 72px
       );
-    mask-image: radial-gradient(circle at center, black, transparent 72%);
+    backdrop-filter: blur(18px) saturate(1.12);
+    -webkit-backdrop-filter: blur(18px) saturate(1.12);
   }
 
 }

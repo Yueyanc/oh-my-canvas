@@ -18,5 +18,14 @@ export function useAuth() {
     setAuth({ isAuthenticated: false });
   }
 
-  return { auth, login, logout };
+  async function updateAccount(input: { username: string; avatarUrl: string | null }) {
+    const account = await api.updateAccountProfile(input);
+    setAuth({ isAuthenticated: true, ...account });
+  }
+
+  async function changePassword(input: { currentPassword: string; newPassword: string }) {
+    await api.changePassword(input);
+  }
+
+  return { auth, login, logout, updateAccount, changePassword };
 }

@@ -1,5 +1,20 @@
 import { index, integer, real, sqliteTable, text, uniqueIndex } from "drizzle-orm/sqlite-core";
 
+export const users = sqliteTable(
+  "users",
+  {
+    id: text("id").primaryKey(),
+    username: text("username").notNull(),
+    passwordHash: text("password_hash").notNull(),
+    avatarUrl: text("avatar_url"),
+    createdAt: text("created_at").notNull(),
+    updatedAt: text("updated_at").notNull()
+  },
+  (table) => ({
+    usernameIdx: uniqueIndex("users_username_idx").on(table.username)
+  })
+);
+
 export const sources = sqliteTable(
   "sources",
   {
@@ -143,6 +158,8 @@ export const aiTokenUsage = sqliteTable(
 
 export type Source = typeof sources.$inferSelect;
 export type NewSource = typeof sources.$inferInsert;
+export type User = typeof users.$inferSelect;
+export type NewUser = typeof users.$inferInsert;
 export type Item = typeof items.$inferSelect;
 export type NewItem = typeof items.$inferInsert;
 export type Summary = typeof summaries.$inferSelect;
