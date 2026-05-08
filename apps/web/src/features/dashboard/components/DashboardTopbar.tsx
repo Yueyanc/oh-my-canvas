@@ -485,7 +485,7 @@ function AccountPanel({
           </div>
           <button
             aria-label="关闭账户设置"
-            className="flex h-10 w-10 items-center justify-center rounded-full text-radar-ink-muted transition-[background-color,color,transform] duration-200 hover:bg-white hover:text-radar-ink active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-radar-lime"
+            className="flex h-10 w-10 items-center justify-center rounded-full text-radar-ink-muted transition-[background-color,color,transform] duration-200 hover:bg-radar-surface-soft hover:text-radar-ink active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
             onClick={onClose}
             type="button"
           >

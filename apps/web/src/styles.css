@@ -29,6 +29,10 @@
   --color-radar-ink-muted: hsl(var(--radar-ink-muted));
   --color-radar-line: hsl(var(--radar-line));
   --color-radar-line-strong: hsl(var(--radar-line-strong));
+  --color-radar-primary: hsl(var(--radar-primary));
+  --color-radar-primary-ink: hsl(var(--radar-primary-ink));
+  --color-radar-accent: hsl(var(--radar-accent));
+  --color-radar-accent-ink: hsl(var(--radar-accent-ink));
   --color-radar-lime: hsl(var(--radar-lime));
   --color-radar-lime-ink: hsl(var(--radar-lime-ink));
   --color-radar-blue: hsl(var(--radar-blue));
@@ -60,6 +64,10 @@
     --radar-ink-muted: 75 5% 63%;
     --radar-line: 60 12% 86%;
     --radar-line-strong: 65 8% 76%;
+    --radar-primary: 84 8% 13%;
+    --radar-primary-ink: 73 100% 72%;
+    --radar-accent: 73 100% 72%;
+    --radar-accent-ink: 82 18% 12%;
     --radar-lime: 73 100% 72%;
     --radar-lime-ink: 82 18% 12%;
     --radar-blue: 217 100% 92%;
@@ -82,19 +90,19 @@
     --foreground: var(--radar-ink);
     --card: var(--radar-surface);
     --card-foreground: var(--radar-ink);
-    --primary: var(--radar-ink);
-    --primary-foreground: var(--radar-lime);
+    --primary: var(--radar-primary);
+    --primary-foreground: var(--radar-primary-ink);
     --secondary: var(--radar-surface-soft);
     --secondary-foreground: var(--radar-ink);
     --muted: var(--radar-surface-soft);
     --muted-foreground: var(--radar-ink-soft);
-    --accent: var(--radar-lime);
-    --accent-foreground: var(--radar-lime-ink);
+    --accent: var(--radar-accent);
+    --accent-foreground: var(--radar-accent-ink);
     --destructive: var(--radar-danger);
     --destructive-foreground: var(--radar-danger-ink);
     --border: var(--radar-line);
     --input: var(--radar-line);
-    --ring: var(--radar-lime);
+    --ring: var(--radar-accent);
     --radius: var(--radar-radius-control);
   }
 
@@ -107,6 +115,10 @@
     --radar-ink-muted: 68 9% 58%;
     --radar-line: 78 8% 24%;
     --radar-line-strong: 76 8% 34%;
+    --radar-primary: 73 100% 72%;
+    --radar-primary-ink: 82 18% 12%;
+    --radar-accent: 73 100% 72%;
+    --radar-accent-ink: 82 18% 12%;
     --radar-lime: 73 100% 72%;
     --radar-lime-ink: 82 18% 12%;
     --radar-blue: 205 36% 24%;
@@ -126,19 +138,19 @@
     --foreground: var(--radar-ink);
     --card: var(--radar-surface);
     --card-foreground: var(--radar-ink);
-    --primary: var(--radar-lime);
-    --primary-foreground: var(--radar-lime-ink);
+    --primary: var(--radar-primary);
+    --primary-foreground: var(--radar-primary-ink);
     --secondary: var(--radar-surface-soft);
     --secondary-foreground: var(--radar-ink);
     --muted: var(--radar-surface-soft);
     --muted-foreground: var(--radar-ink-soft);
-    --accent: var(--radar-lime);
-    --accent-foreground: var(--radar-lime-ink);
+    --accent: var(--radar-accent);
+    --accent-foreground: var(--radar-accent-ink);
     --destructive: var(--radar-danger);
     --destructive-foreground: var(--radar-danger-ink);
     --border: var(--radar-line);
     --input: var(--radar-line);
-    --ring: var(--radar-lime);
+    --ring: var(--radar-accent);
   }
 
   :root[data-theme="sage"] {
@@ -150,6 +162,10 @@
     --radar-ink-muted: 92 7% 58%;
     --radar-line: 88 18% 78%;
     --radar-line-strong: 86 16% 67%;
+    --radar-primary: 99 34% 34%;
+    --radar-primary-ink: 84 46% 96%;
+    --radar-accent: 85 68% 63%;
+    --radar-accent-ink: 94 24% 14%;
     --radar-lime: 78 100% 68%;
     --radar-lime-ink: 90 22% 12%;
     --radar-shadow-card: 0 12px 36px rgb(44 58 37 / 0.08);
@@ -165,13 +181,20 @@
     --radar-ink-muted: 84 10% 58%;
     --radar-line: 96 10% 26%;
     --radar-line-strong: 96 10% 36%;
-    --radar-lime: 78 100% 68%;
-    --radar-lime-ink: 90 22% 12%;
+    --radar-primary: 101 60% 66%;
+    --radar-primary-ink: 94 24% 13%;
+    --radar-accent: 101 60% 66%;
+    --radar-accent-ink: 94 24% 13%;
+    --radar-lime: 101 60% 66%;
+    --radar-lime-ink: 94 24% 13%;
     --radar-shadow-card: 0 14px 42px rgb(0 0 0 / 0.26);
     --radar-shadow-popover: 0 22px 70px rgb(0 0 0 / 0.36);
 
-    --primary: var(--radar-lime);
-    --primary-foreground: var(--radar-lime-ink);
+    --primary: var(--radar-primary);
+    --primary-foreground: var(--radar-primary-ink);
+    --accent: var(--radar-accent);
+    --accent-foreground: var(--radar-accent-ink);
+    --ring: var(--radar-accent);
   }
 
   :root[data-theme="ocean"] {
@@ -183,8 +206,12 @@
     --radar-ink-muted: 204 10% 59%;
     --radar-line: 196 20% 78%;
     --radar-line-strong: 198 18% 66%;
-    --radar-lime: 73 100% 72%;
-    --radar-lime-ink: 82 18% 12%;
+    --radar-primary: 199 76% 36%;
+    --radar-primary-ink: 196 70% 97%;
+    --radar-accent: 188 82% 54%;
+    --radar-accent-ink: 199 42% 13%;
+    --radar-lime: 188 82% 54%;
+    --radar-lime-ink: 199 42% 13%;
     --radar-shadow-card: 0 12px 36px rgb(36 58 66 / 0.08);
     --radar-shadow-popover: 0 18px 56px rgb(36 58 66 / 0.14);
   }
@@ -198,15 +225,22 @@
     --radar-ink-muted: 198 12% 58%;
     --radar-line: 204 14% 27%;
     --radar-line-strong: 204 14% 38%;
-    --radar-lime: 73 100% 72%;
-    --radar-lime-ink: 82 18% 12%;
+    --radar-primary: 190 86% 60%;
+    --radar-primary-ink: 205 44% 12%;
+    --radar-accent: 190 86% 60%;
+    --radar-accent-ink: 205 44% 12%;
+    --radar-lime: 190 86% 60%;
+    --radar-lime-ink: 205 44% 12%;
     --radar-blue: 205 36% 24%;
     --radar-blue-ink: 204 72% 80%;
     --radar-shadow-card: 0 14px 42px rgb(0 0 0 / 0.26);
     --radar-shadow-popover: 0 22px 70px rgb(0 0 0 / 0.36);
 
-    --primary: var(--radar-lime);
-    --primary-foreground: var(--radar-lime-ink);
+    --primary: var(--radar-primary);
+    --primary-foreground: var(--radar-primary-ink);
+    --accent: var(--radar-accent);
+    --accent-foreground: var(--radar-accent-ink);
+    --ring: var(--radar-accent);
   }
 
   :root[data-theme="dusk"] {
@@ -218,8 +252,12 @@
     --radar-ink-muted: 268 8% 62%;
     --radar-line: 268 16% 82%;
     --radar-line-strong: 268 14% 70%;
-    --radar-lime: 73 100% 72%;
-    --radar-lime-ink: 82 18% 12%;
+    --radar-primary: 274 48% 43%;
+    --radar-primary-ink: 268 72% 97%;
+    --radar-accent: 318 68% 62%;
+    --radar-accent-ink: 318 38% 14%;
+    --radar-lime: 318 68% 62%;
+    --radar-lime-ink: 318 38% 14%;
     --radar-purple: 276 100% 92%;
     --radar-purple-ink: 276 45% 34%;
     --radar-shadow-card: 0 12px 36px rgb(50 38 68 / 0.08);
@@ -235,8 +273,12 @@
     --radar-ink-muted: 264 10% 60%;
     --radar-line: 264 12% 28%;
     --radar-line-strong: 264 12% 38%;
-    --radar-lime: 73 100% 72%;
-    --radar-lime-ink: 82 18% 12%;
+    --radar-primary: 286 84% 72%;
+    --radar-primary-ink: 270 32% 12%;
+    --radar-accent: 318 86% 70%;
+    --radar-accent-ink: 318 38% 13%;
+    --radar-lime: 318 86% 70%;
+    --radar-lime-ink: 318 38% 13%;
     --radar-blue: 248 28% 25%;
     --radar-blue-ink: 246 84% 84%;
     --radar-purple: 276 32% 26%;
@@ -244,8 +286,11 @@
     --radar-shadow-card: 0 14px 42px rgb(0 0 0 / 0.24);
     --radar-shadow-popover: 0 22px 70px rgb(0 0 0 / 0.34);
 
-    --primary: var(--radar-lime);
-    --primary-foreground: var(--radar-lime-ink);
+    --primary: var(--radar-primary);
+    --primary-foreground: var(--radar-primary-ink);
+    --accent: var(--radar-accent);
+    --accent-foreground: var(--radar-accent-ink);
+    --ring: var(--radar-accent);
   }
 
   * {

@@ -77,7 +77,7 @@ export function AnimatedThemeToggler({
     <button
       aria-label={isDark ? "切换到浅色模式" : "切换到深色模式"}
       aria-pressed={isDark}
-      className="relative flex h-10 w-10 items-center justify-center overflow-hidden rounded-full text-radar-ink-muted transition-[background-color,color,transform] duration-200 hover:bg-radar-surface-soft hover:text-radar-ink active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-radar-lime"
+      className="relative flex h-10 w-10 items-center justify-center overflow-hidden rounded-full text-radar-ink-muted transition-[background-color,color,transform] duration-200 hover:bg-radar-surface-soft hover:text-radar-ink active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
       onClick={toggleTheme}
       type="button"
     >

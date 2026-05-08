@@ -209,7 +209,7 @@ export function LoginPage({ onLogin }: { onLogin: (username: string, password: s
                       className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-radar-ink-muted"
                     />
                     <Input
-                      className="h-12 border-white/60 bg-white/45 pl-11 text-[15px] shadow-inner backdrop-blur-xl placeholder:text-radar-ink-muted focus-visible:ring-radar-lime"
+                      className="h-12 border-white/60 bg-white/45 pl-11 text-[15px] shadow-inner backdrop-blur-xl placeholder:text-radar-ink-muted focus-visible:ring-ring"
                       placeholder="输入用户名"
                       value={username}
                       onChange={(event) => setUsername(event.target.value)}
@@ -225,7 +225,7 @@ export function LoginPage({ onLogin }: { onLogin: (username: string, password: s
                       className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-radar-ink-muted"
                     />
                     <Input
-                      className="h-12 border-white/60 bg-white/45 pl-11 pr-11 text-[15px] shadow-inner backdrop-blur-xl placeholder:text-radar-ink-muted focus-visible:ring-radar-lime"
+                      className="h-12 border-white/60 bg-white/45 pl-11 pr-11 text-[15px] shadow-inner backdrop-blur-xl placeholder:text-radar-ink-muted focus-visible:ring-ring"
                       placeholder="输入密码"
                       type={isPasswordVisible ? "text" : "password"}
                       value={password}
@@ -233,7 +233,7 @@ export function LoginPage({ onLogin }: { onLogin: (username: string, password: s
                     />
                     <button
                       aria-label={isPasswordVisible ? "隐藏密码" : "显示密码"}
-                      className="absolute right-2 top-1/2 flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-full text-radar-ink-muted transition-[background-color,color,box-shadow,transform] duration-200 ease-out hover:bg-white/45 hover:text-radar-ink-soft hover:shadow-[0_6px_18px_rgb(35_38_32_/_0.08)] active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-radar-lime"
+                      className="absolute right-2 top-1/2 flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-full text-radar-ink-muted transition-[background-color,color,box-shadow,transform] duration-200 ease-out hover:bg-white/45 hover:text-radar-ink-soft hover:shadow-[0_6px_18px_rgb(35_38_32_/_0.08)] active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
                       onClick={() => setIsPasswordVisible((visible) => !visible)}
                       type="button"
                     >
