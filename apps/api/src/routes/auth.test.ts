@@ -65,3 +65,47 @@ test("changes the current account password through authenticated routes", async 
   });
   expect(newLogin.status).toBe(200);
 });
+
+test("keeps authenticated sessions after recreating the api app", async () => {
+  const db = createDb("file::memory:");
+  await ensureDefaultUser(db, { username: "admin", password: "admin123" });
+  const firstApp = createApiApp(db);
+
+  const loginResponse = await firstApp.request("/api/auth/login", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ username: "admin", password: "admin123" })
+  });
+  const cookie = loginResponse.headers.get("set-cookie") ?? "";
+
+  const recreatedApp = createApiApp(db);
+  const meResponse = await recreatedApp.request("/api/auth/me", { headers: { cookie } });
+
+  expect(meResponse.status).toBe(200);
+  expect(await meResponse.json()).toMatchObject({
+    authenticated: true,
+    user: { username: "admin" }
+  });
+});
+
+test("revokes persisted sessions on logout", async () => {
+  const db = createDb("file::memory:");
+  await ensureDefaultUser(db, { username: "admin", password: "admin123" });
+  const app = createApiApp(db);
+
+  const loginResponse = await app.request("/api/auth/login", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ username: "admin", password: "admin123" })
+  });
+  const cookie = loginResponse.headers.get("set-cookie") ?? "";
+
+  const logoutResponse = await app.request("/api/auth/logout", {
+    method: "POST",
+    headers: { cookie }
+  });
+  expect(logoutResponse.status).toBe(200);
+
+  const protectedResponse = await app.request("/api/radar/overview", { headers: { cookie } });
+  expect(protectedResponse.status).toBe(401);
+});

@@ -1,25 +1,15 @@
 import { HugeiconsIcon } from "@hugeicons/react";
-import {
-  DashboardSquare01Icon,
-  DeliveryBox01Icon,
-  InboxIcon,
-  PackageIcon,
-  Settings02Icon,
-  Shield01Icon,
-  WalletCardsIcon
-} from "@hugeicons/core-free-icons";
+import { appRoutes, type AppRoute } from "../../../app/routes";
 
-const navItems = [
-  { icon: DashboardSquare01Icon, label: "总览" },
-  { icon: DeliveryBox01Icon, label: "采集" },
-  { icon: InboxIcon, label: "信号" },
-  { icon: WalletCardsIcon, label: "令牌" },
-  { icon: PackageIcon, label: "资源" },
-  { icon: Settings02Icon, label: "设置" },
-  { icon: Shield01Icon, label: "安全" }
-];
-
-export function DashboardRail({ isExpanded }: { isExpanded: boolean }) {
+export function DashboardRail({
+  activeRoute,
+  isExpanded,
+  onRouteChange
+}: {
+  activeRoute: AppRoute;
+  isExpanded: boolean;
+  onRouteChange: (route: AppRoute) => void;
+}) {
   return (
     <aside
       className="hidden h-full w-full shrink-0 overflow-hidden px-4 py-8 md:flex md:flex-col"
@@ -36,30 +26,35 @@ export function DashboardRail({ isExpanded }: { isExpanded: boolean }) {
       </div>
 
       <nav className="mt-10 flex flex-1 flex-col gap-3">
-        {navItems.map((item, index) => (
-          <button
-            key={item.label}
-            className="group flex h-10 w-full items-center text-sm font-medium"
-            type="button"
-          >
-            <span
-              className={
-                isExpanded
-                  ? index === 0
-                    ? "flex h-10 w-full items-center gap-3 overflow-hidden rounded-full bg-primary text-primary-foreground shadow-sm transition-[width,background-color,color] duration-300 ease-out"
-                    : "flex h-10 w-full items-center gap-3 overflow-hidden rounded-full text-radar-ink-muted transition-[width,background-color,color] duration-300 ease-out group-hover:bg-radar-surface group-hover:text-radar-ink"
-                  : index === 0
-                    ? "flex h-10 w-10 items-center gap-0 overflow-hidden rounded-full bg-primary text-primary-foreground shadow-sm transition-[width,background-color,color] duration-300 ease-out"
-                    : "flex h-10 w-10 items-center gap-0 overflow-hidden rounded-full text-radar-ink-muted transition-[width,background-color,color] duration-300 ease-out group-hover:bg-radar-surface group-hover:text-radar-ink"
-              }
+        {appRoutes.map((item) => {
+          const isActive = activeRoute.key === item.key;
+          return (
+            <button
+              aria-current={isActive ? "page" : undefined}
+              className="group flex h-10 w-full items-center text-sm font-medium"
+              key={item.key}
+              onClick={() => onRouteChange(item)}
+              type="button"
             >
-              <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full">
-                <HugeiconsIcon icon={item.icon} className="h-5 w-5 shrink-0" />
+              <span
+                className={
+                  isExpanded
+                    ? isActive
+                      ? "flex h-10 w-full items-center gap-3 overflow-hidden rounded-full bg-primary text-primary-foreground shadow-sm transition-[width,background-color,color] duration-300 ease-out"
+                      : "flex h-10 w-full items-center gap-3 overflow-hidden rounded-full text-radar-ink-muted transition-[width,background-color,color] duration-300 ease-out group-hover:bg-radar-surface group-hover:text-radar-ink"
+                    : isActive
+                      ? "flex h-10 w-10 items-center gap-0 overflow-hidden rounded-full bg-primary text-primary-foreground shadow-sm transition-[width,background-color,color] duration-300 ease-out"
+                      : "flex h-10 w-10 items-center gap-0 overflow-hidden rounded-full text-radar-ink-muted transition-[width,background-color,color] duration-300 ease-out group-hover:bg-radar-surface group-hover:text-radar-ink"
+                }
+              >
+                <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full">
+                  <HugeiconsIcon icon={item.icon} className="h-5 w-5 shrink-0" />
+                </span>
+                <RailLabel isExpanded={isExpanded}>{item.label}</RailLabel>
               </span>
-              <RailLabel isExpanded={isExpanded}>{item.label}</RailLabel>
-            </span>
-          </button>
-        ))}
+            </button>
+          );
+        })}
       </nav>
     </aside>
   );

@@ -31,13 +31,13 @@ export function createAuthRoutes(db: AppDb) {
         return c.json({ error: "Invalid username or password" }, 401);
       }
 
-      createSession(c, account);
+      await createSession(db, c, account);
       return c.json({ user: account });
     }
   );
 
   routes.get("/me", async (c) => {
-    const session = getRequestSession(c);
+    const session = await getRequestSession(db, c);
     const account = session ? await getAccountProfile(db, session.userId) : null;
     return c.json({
       authenticated: Boolean(account),
@@ -46,7 +46,7 @@ export function createAuthRoutes(db: AppDb) {
   });
 
   routes.get("/account", async (c) => {
-    const session = getRequestSession(c);
+    const session = await getRequestSession(db, c);
     if (!session) return c.json({ error: "Unauthorized" }, 401);
     const account = await getAccountProfile(db, session.userId);
     if (!account) return c.json({ error: "Account not found" }, 404);
@@ -63,13 +63,13 @@ export function createAuthRoutes(db: AppDb) {
       })
     ),
     async (c) => {
-      const session = getRequestSession(c);
+      const session = await getRequestSession(db, c);
       if (!session) return c.json({ error: "Unauthorized" }, 401);
 
       const body = c.req.valid("json");
       try {
         const account = await updateAccountProfile(db, session.userId, body);
-        createSession(c, account);
+        await createSession(db, c, account);
         return c.json({ user: account });
       } catch (error) {
         if (error instanceof Error && error.message === "Account not found") {
@@ -90,7 +90,7 @@ export function createAuthRoutes(db: AppDb) {
       })
     ),
     async (c) => {
-      const session = getRequestSession(c);
+      const session = await getRequestSession(db, c);
       if (!session) return c.json({ error: "Unauthorized" }, 401);
 
       const body = c.req.valid("json");
@@ -109,8 +109,8 @@ export function createAuthRoutes(db: AppDb) {
     }
   );
 
-  routes.post("/logout", (c) => {
-    clearSession(c);
+  routes.post("/logout", async (c) => {
+    await clearSession(db, c);
     return c.json({ ok: true });
   });
 

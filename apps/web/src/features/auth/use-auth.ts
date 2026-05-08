@@ -8,6 +8,15 @@ export function useAuth() {
     api.getCurrentUser().then(setAuth).catch(() => setAuth({ isAuthenticated: false }));
   }, []);
 
+  React.useEffect(() => {
+    function handleUnauthorized() {
+      setAuth({ isAuthenticated: false });
+    }
+
+    window.addEventListener(api.unauthorizedEventName, handleUnauthorized);
+    return () => window.removeEventListener(api.unauthorizedEventName, handleUnauthorized);
+  }, []);
+
   async function login(username: string, password: string) {
     const nextAuth = await api.login(username, password);
     setAuth(nextAuth);

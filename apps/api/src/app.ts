@@ -15,7 +15,7 @@ export function createApiApp(db: AppDb) {
 
   app.use("*", cors());
   app.use("*", requestLogger());
-  app.use("/api/*", requireAuth());
+  app.use("/api/*", requireAuth(db));
 
   app.route("/api/auth", createAuthRoutes(db));
   app.route("/api", createSystemRoutes());

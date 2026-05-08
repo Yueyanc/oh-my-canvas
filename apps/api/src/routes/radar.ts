@@ -2,7 +2,7 @@ import { Hono } from "hono";
 import { zValidator } from "@hono/zod-validator";
 import { z } from "zod";
 import { loadRadarConfig } from "@information/core";
-import { getAiTokenUsageSummary, listItems, listRuns, type AppDb } from "@information/db";
+import { getAiTokenUsageSummary, getRadarOverview, listItems, listRuns, type AppDb } from "@information/db";
 import { runCollection } from "../scheduler";
 
 export function createRadarRoutes(db: AppDb) {
@@ -32,6 +32,22 @@ export function createRadarRoutes(db: AppDb) {
     const runs = await listRuns(db);
     return c.json({ runs });
   });
+
+  routes.get(
+    "/radar/overview",
+    zValidator(
+      "query",
+      z.object({
+        perSourceLimit: z.coerce.number().min(1).max(30).optional(),
+        globalLimit: z.coerce.number().min(1).max(50).optional()
+      })
+    ),
+    async (c) => {
+      const query = c.req.valid("query");
+      const overview = await getRadarOverview(db, query);
+      return c.json(overview);
+    }
+  );
 
   routes.get("/config", async (c) => {
     const config = await loadRadarConfig();
