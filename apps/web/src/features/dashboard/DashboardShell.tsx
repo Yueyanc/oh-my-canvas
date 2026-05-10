@@ -2,6 +2,7 @@ import React from "react";
 import { Navigate, Route, Routes } from "react-router-dom";
 import { DashboardRail } from "./components/DashboardRail";
 import { DashboardTopbar } from "./components/DashboardTopbar";
+import { CollectPage } from "./components/CollectPage";
 import { OverviewPage } from "./components/OverviewPage";
 import { appRoutes, defaultRoute, type AppRoute } from "../../app/routes";
 import type { FontKey } from "../../shared/config/fonts";
@@ -84,8 +85,9 @@ function DashboardRoutes({ onRouteReset }: { onRouteReset: () => void }) {
     <Routes>
       <Route element={<Navigate replace to={defaultRoute.path} />} path="/" />
       <Route element={<OverviewPage />} path="/overview" />
+      <Route element={<CollectPage />} path="/collect" />
       {appRoutes
-        .filter((item) => item.key !== "overview")
+        .filter((item) => item.key !== "overview" && item.key !== "collect")
         .map((item) => (
           <Route element={<RoutePlaceholder onRouteReset={onRouteReset} route={item} />} key={item.key} path={item.path} />
         ))}

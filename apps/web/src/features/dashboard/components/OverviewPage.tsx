@@ -63,15 +63,17 @@ export function OverviewPage() {
   if (isLoading) return <OverviewSkeleton />;
 
   return (
-    <section className="flex w-full flex-col gap-4">
-      <div className="flex flex-col gap-3 lg:flex-row lg:items-end lg:justify-between">
+    <section className="flex w-full flex-col gap-5">
+      <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
         <div className="min-w-0">
-          <div className="flex items-center gap-2 text-sm font-medium text-radar-ink-soft">
+          <div className="flex items-center gap-2 text-xs font-semibold uppercase text-radar-ink-muted">
             <HugeiconsIcon icon={DashboardSquare01Icon} className="h-4 w-4 text-primary" />
             总览
           </div>
-          <h1 className="mt-1 text-2xl font-semibold leading-tight text-radar-ink">实时热榜排名</h1>
-          <p className="mt-1 max-w-2xl text-sm leading-6 text-radar-ink-soft">
+          <h1 className="mt-1.5 text-[1.7rem] font-semibold leading-tight text-radar-ink sm:text-3xl">
+            实时热榜排名
+          </h1>
+          <p className="mt-2 max-w-2xl text-sm leading-6 text-radar-ink-soft">
             优先展示各来源原始排行与原始指标；来源内展示连续排名，原始 rank 只参与排序。
           </p>
         </div>
@@ -81,13 +83,13 @@ export function OverviewPage() {
           <MetricPill label="条目池" value={overview?.totals.itemCount ?? 0} />
           <MetricPill label="更新" value={overview?.generatedAt ? formatRelativeTime(overview.generatedAt) : "暂无"} />
           <button
-            className="inline-flex h-9 items-center gap-2 rounded-full border border-radar-line bg-radar-surface px-3 text-sm font-medium text-radar-ink-soft shadow-card transition-colors hover:bg-radar-surface-soft hover:text-radar-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+            className="inline-flex h-10 items-center gap-2 rounded-full border border-radar-line bg-radar-surface px-3.5 text-sm font-medium text-radar-ink-soft shadow-card transition-[background-color,color,transform] duration-200 ease-out hover:-translate-y-px hover:bg-radar-surface-soft hover:text-radar-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-70 motion-reduce:transform-none motion-reduce:transition-none"
             disabled={isRefreshing}
             onClick={() => void loadOverview("refresh")}
             type="button"
           >
             <HugeiconsIcon icon={RefreshIcon} className={`h-4 w-4 ${isRefreshing ? "animate-spin" : ""}`} />
-            刷新
+            {isRefreshing ? "刷新中" : "刷新"}
           </button>
         </div>
       </div>
@@ -125,18 +127,18 @@ function SourceGrid({ sources }: { sources: OverviewSource[] }) {
 
 function SourceRankingCard({ source }: { source: OverviewSource }) {
   return (
-    <article className="flex min-h-[18rem] flex-col rounded-card border border-radar-line bg-radar-surface/85 p-3 shadow-card">
-      <div className="flex items-start justify-between gap-2">
+    <article className="flex min-h-[18rem] transform-gpu flex-col rounded-card border border-radar-line bg-radar-surface/90 p-4 shadow-card transition-[background-color,border-color,transform] duration-200 ease-out hover:-translate-y-px hover:border-radar-line-strong hover:bg-radar-surface motion-reduce:transform-none motion-reduce:transition-none">
+      <div className="flex items-start justify-between gap-3">
         <SourceTitle source={source} />
         <MetricBadge label="条目" value={source.itemCount} />
       </div>
 
-      <div className="mt-3 flex flex-1 flex-col gap-1">
+      <div className="mt-4 flex flex-1 flex-col gap-1">
         {source.items.length ? source.items.map((item, index) => <SourceRankRow item={item} key={item.id} fallbackRank={index + 1} />) : <EmptyList />}
       </div>
 
-      <div className="mt-3 flex items-center justify-between border-t border-radar-line pt-2 text-xs text-radar-ink-muted">
-        <span>权重 {formatCompactNumber(source.weight)}</span>
+      <div className="mt-4 flex items-center justify-between border-t border-radar-line pt-3 text-xs text-radar-ink-muted">
+        <span>权重 <strong className="font-semibold tabular-nums text-radar-ink-soft">{formatCompactNumber(source.weight)}</strong></span>
         <span>{source.lastSeenAt ? `最近 ${formatRelativeTime(source.lastSeenAt)}` : "暂无更新"}</span>
       </div>
     </article>
@@ -147,16 +149,13 @@ function SourceTitle({ source }: { source: OverviewSource }) {
   const platform = platformIconFor(source);
   return (
     <div className="min-w-0">
-      <div className="flex items-center gap-2 text-xs font-medium uppercase text-radar-ink-muted">
-        <span
-          className="flex h-4 w-4 shrink-0 items-center justify-center text-primary"
-          title={platform.label}
-        >
+      <div className="flex items-center gap-2 text-[11px] font-semibold uppercase leading-4 text-radar-ink-muted">
+        <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-radar-surface-soft text-primary" title={platform.label}>
           {platform.Icon ? <platform.Icon className="h-3.5 w-3.5" /> : <HugeiconsIcon icon={RankingIcon} className="h-4 w-4" />}
         </span>
         <span className="truncate">{platform.label}</span>
       </div>
-      <h2 className="mt-0.5 truncate text-base font-semibold text-radar-ink">{source.name}</h2>
+      <h2 className="mt-1 truncate text-[15px] font-semibold leading-6 text-radar-ink">{source.name}</h2>
     </div>
   );
 }
@@ -170,16 +169,16 @@ function GlobalRanking({
 }) {
   return (
     <section className="grid gap-3 xl:grid-cols-[minmax(0,1fr)_18rem]">
-      <div className="rounded-card border border-radar-line bg-radar-surface/85 p-3 shadow-card">
+      <div className="rounded-card border border-radar-line bg-radar-surface/90 p-4 shadow-card">
         <SectionTitle icon={FireIcon} kicker="全站" title="综合热度 Top 20" />
         <div className="mt-3 grid gap-1">
           {items.length ? items.map((item, index) => <GlobalRankRow item={item} key={item.id} rank={index + 1} />) : <EmptyList />}
         </div>
       </div>
 
-      <aside className="rounded-card border border-radar-line bg-radar-surface/85 p-3 shadow-card">
+      <aside className="rounded-card border border-radar-line bg-radar-surface/90 p-4 shadow-card">
         <SectionTitle icon={ChartLineData01Icon} kicker="采集状态" title="最近一次运行" />
-        <dl className="mt-4 grid gap-2 text-sm">
+        <dl className="mt-4 grid gap-2.5 text-sm">
           <StatusLine label="状态" value={latestRun ? runStatusLabel(latestRun.status) : "暂无"} tone={latestRun?.status} />
           <StatusLine label="开始" value={latestRun ? formatDateTime(latestRun.startedAt) : "暂无"} />
           <StatusLine label="完成" value={latestRun?.finishedAt ? formatDateTime(latestRun.finishedAt) : "暂无"} />
@@ -198,7 +197,7 @@ function GlobalRanking({
 
 function GlobalRankRow({ item, rank }: { item: OverviewItem; rank: number }) {
   return (
-    <a className="group grid grid-cols-[2rem_minmax(0,1fr)_auto] items-center gap-2 rounded-xl border border-transparent px-2 py-1.5 transition-colors hover:border-radar-line hover:bg-radar-surface-soft" href={item.url} rel="noreferrer" target="_blank">
+    <a className="group grid min-h-10 grid-cols-[2rem_minmax(0,1fr)_auto] items-center gap-2 rounded-xl border border-transparent px-2 py-2 transition-colors duration-150 ease-out hover:border-radar-line hover:bg-radar-surface-soft focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring motion-reduce:transition-none" href={item.url} rel="noreferrer" target="_blank">
       <RankMarker rank={rank} />
       <ItemText item={item} showSource />
       <ItemScore item={item} />
@@ -208,7 +207,7 @@ function GlobalRankRow({ item, rank }: { item: OverviewItem; rank: number }) {
 
 function SourceRankRow({ item, fallbackRank }: { item: OverviewItem; fallbackRank: number }) {
   return (
-    <a className="group grid grid-cols-[2rem_minmax(0,1fr)_auto] items-center gap-2 rounded-xl border border-transparent px-2 py-1.5 transition-colors hover:border-radar-line hover:bg-radar-surface-soft" href={item.url} rel="noreferrer" target="_blank">
+    <a className="group grid min-h-10 grid-cols-[2rem_minmax(0,1fr)_auto] items-center gap-2 rounded-xl border border-transparent px-2 py-1.5 transition-colors duration-150 ease-out hover:border-radar-line hover:bg-radar-surface-soft focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring motion-reduce:transition-none" href={item.url} rel="noreferrer" target="_blank">
       <RankMarker rank={item.displayRank ?? fallbackRank} isFallback={item.rank === null} />
       <ItemText item={item} />
       <ItemScore item={item} />
@@ -220,13 +219,13 @@ function ItemText({ item, showSource = false }: { item: OverviewItem; showSource
   return (
     <div className="min-w-0">
       <div className="flex items-center gap-1.5">
-        <h3 className="truncate text-[13px] font-medium leading-5 text-radar-ink group-hover:text-primary">
+        <h3 className="truncate text-[13.5px] font-medium leading-5 text-radar-ink group-hover:text-primary">
           {item.displayTitle ?? item.title}
         </h3>
-        <HugeiconsIcon icon={ArrowUpRight01Icon} className="h-3.5 w-3.5 shrink-0 text-radar-ink-muted opacity-0 transition-opacity group-hover:opacity-100" />
+        <HugeiconsIcon icon={ArrowUpRight01Icon} className="h-3.5 w-3.5 shrink-0 text-radar-ink-muted opacity-0 transition-opacity duration-150 ease-out group-hover:opacity-100 motion-reduce:transition-none" />
       </div>
       <div className="mt-0.5 flex min-w-0 flex-wrap items-center gap-1 text-[11px] leading-4 text-radar-ink-muted">
-        {showSource ? <span className="shrink-0 text-radar-ink-soft">{item.sourceName}</span> : null}
+        {showSource ? <span className="shrink-0 font-medium text-radar-ink-soft">{item.sourceName}</span> : null}
         {item.category ? <span className="shrink-0">{item.category}</span> : null}
         <RawMetricChips item={item} />
       </div>
@@ -252,8 +251,8 @@ function RawMetricChips({ item }: { item: OverviewItem }) {
 function ItemScore({ item }: { item: OverviewItem }) {
   return (
     <div className="flex min-w-[3.25rem] flex-col items-end">
-      <span className="text-[13px] font-semibold tabular-nums text-radar-ink">{formatCompactNumber(item.score)}</span>
-      <span className="text-[11px] tabular-nums text-radar-ink-muted">综合分</span>
+      <span className="text-[13px] font-semibold tabular-nums leading-5 text-radar-ink">{formatCompactNumber(item.score)}</span>
+      <span className="text-[11px] tabular-nums leading-4 text-radar-ink-muted">综合分</span>
     </div>
   );
 }
@@ -264,7 +263,7 @@ function RankMarker({ rank, isFallback = false }: { rank: number; isFallback?: b
     <div
       className={
         isTop
-          ? "flex h-7 w-7 items-center justify-center rounded-full bg-primary text-xs font-semibold tabular-nums text-primary-foreground"
+          ? "flex h-7 w-7 items-center justify-center rounded-full bg-primary text-xs font-semibold tabular-nums text-primary-foreground shadow-sm"
           : "flex h-7 w-7 items-center justify-center rounded-full bg-radar-surface-soft text-xs font-semibold tabular-nums text-radar-ink-soft"
       }
       title={isFallback ? "按热度补位排序" : "来源展示排名"}
@@ -285,11 +284,11 @@ function SectionTitle({
 }) {
   return (
     <div className="min-w-0">
-      <div className="flex items-center gap-2 text-xs font-medium uppercase text-radar-ink-muted">
+      <div className="flex items-center gap-2 text-[11px] font-semibold uppercase leading-4 text-radar-ink-muted">
         <HugeiconsIcon icon={icon} className="h-4 w-4 text-primary" />
         <span className="truncate">{kicker}</span>
       </div>
-      <h2 className="mt-0.5 truncate text-base font-semibold text-radar-ink">{title}</h2>
+      <h2 className="mt-1 truncate text-[15px] font-semibold leading-6 text-radar-ink">{title}</h2>
     </div>
   );
 }
@@ -313,7 +312,7 @@ function platformIconFor(source: OverviewSource): { Icon?: IconType; label: stri
 
 function MetricPill({ label, value }: { label: string; value: React.ReactNode }) {
   return (
-    <div className="inline-flex h-9 items-center gap-2 rounded-full border border-radar-line bg-radar-surface px-3 text-sm shadow-card">
+    <div className="inline-flex h-10 items-center gap-2 rounded-full border border-radar-line bg-radar-surface px-3 text-sm shadow-card">
       <span className="text-radar-ink-muted">{label}</span>
       <span className="font-semibold tabular-nums text-radar-ink">{value}</span>
     </div>
@@ -322,7 +321,7 @@ function MetricPill({ label, value }: { label: string; value: React.ReactNode })
 
 function MetricBadge({ label, value }: { label: string; value: React.ReactNode }) {
   return (
-    <span className="inline-flex h-6 shrink-0 items-center gap-1 rounded-full bg-radar-surface-soft px-2 text-[11px] text-radar-ink-soft">
+    <span className="inline-flex h-7 shrink-0 items-center gap-1 rounded-full bg-radar-surface-soft px-2.5 text-xs text-radar-ink-soft">
       {label}
       <strong className="font-semibold tabular-nums text-radar-ink">{value}</strong>
     </span>
@@ -365,7 +364,7 @@ function EmptyList() {
 
 function OverviewSkeleton() {
   return (
-    <section className="flex w-full flex-col gap-4">
+    <section className="flex w-full flex-col gap-5">
       <div className="h-24 animate-pulse rounded-card bg-radar-surface/70" />
       <div className="grid gap-3 lg:grid-cols-2 xl:grid-cols-3">
         {Array.from({ length: 6 }).map((_, index) => (

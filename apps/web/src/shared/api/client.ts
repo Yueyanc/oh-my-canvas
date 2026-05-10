@@ -76,10 +76,35 @@ export type RadarOverview = {
   sources: OverviewSource[];
 };
 
+export type CollectRun = {
+  id: string;
+  status: "running" | "success" | "failed" | string;
+  startedAt: string;
+  finishedAt: string | null;
+  collectedCount: number;
+  insertedCount: number;
+  updatedCount: number;
+  error: string | null;
+};
+
 export async function getRadarOverview(): Promise<RadarOverview> {
   const response = await authorizedFetch("/api/radar/overview?perSourceLimit=8&globalLimit=20");
   const payload = await response.json();
   if (!response.ok) throw new Error(payload.error ?? "无法获取总览数据");
+  return payload;
+}
+
+export async function getCollectRuns(): Promise<CollectRun[]> {
+  const response = await authorizedFetch("/api/runs");
+  const payload = await response.json();
+  if (!response.ok) throw new Error(payload.error ?? "无法获取采集记录");
+  return payload.runs ?? [];
+}
+
+export async function triggerCollection() {
+  const response = await authorizedFetch("/api/collect", { method: "POST" });
+  const payload = await response.json();
+  if (!response.ok) throw new Error(payload.error ?? "触发采集失败");
   return payload;
 }
 
