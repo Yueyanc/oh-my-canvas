@@ -1,5 +1,4 @@
 import { Hono } from "hono";
-import { getSchedulerState } from "../scheduler";
 
 export function createSystemRoutes() {
   const routes = new Hono();
@@ -8,12 +7,9 @@ export function createSystemRoutes() {
     c.json({
       ok: true,
       runtime: "bun",
-      time: new Date().toISOString(),
-      scheduler: getSchedulerState()
+      time: new Date().toISOString()
     })
   );
-
-  routes.get("/scheduler", (c) => c.json(getSchedulerState()));
 
   return routes;
 }

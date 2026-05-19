@@ -18,17 +18,17 @@ test("updates the current account profile through authenticated routes", async (
   const updateResponse = await app.request("/api/auth/account", {
     method: "PATCH",
     headers: { "Content-Type": "application/json", cookie },
-    body: JSON.stringify({ username: "radar-admin", avatarUrl: "https://example.com/avatar.png" })
+    body: JSON.stringify({ username: "template-admin", avatarUrl: "https://example.com/avatar.png" })
   });
   expect(updateResponse.status).toBe(200);
   expect(await updateResponse.json()).toMatchObject({
-    user: { username: "radar-admin", avatarUrl: "https://example.com/avatar.png" }
+    user: { username: "template-admin", avatarUrl: "https://example.com/avatar.png" }
   });
 
   const meResponse = await app.request("/api/auth/me", { headers: { cookie } });
   expect(await meResponse.json()).toMatchObject({
     authenticated: true,
-    user: { username: "radar-admin", avatarUrl: "https://example.com/avatar.png" }
+    user: { username: "template-admin", avatarUrl: "https://example.com/avatar.png" }
   });
 });
 
@@ -106,6 +106,6 @@ test("revokes persisted sessions on logout", async () => {
   });
   expect(logoutResponse.status).toBe(200);
 
-  const protectedResponse = await app.request("/api/radar/overview", { headers: { cookie } });
+  const protectedResponse = await app.request("/api/account", { headers: { cookie } });
   expect(protectedResponse.status).toBe(401);
 });

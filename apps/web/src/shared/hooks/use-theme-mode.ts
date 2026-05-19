@@ -8,7 +8,7 @@ export const themeOptions: Array<{
   label: string;
   swatch: string;
 }> = [
-  { key: "radar", label: "雷达", swatch: "bg-[#f8f5ed]" },
+  { key: "radar", label: "基础", swatch: "bg-[#f8f5ed]" },
   { key: "sage", label: "鼠尾草", swatch: "bg-[#dfead9]" },
   { key: "ocean", label: "雾蓝", swatch: "bg-[#dce9ef]" },
   { key: "dusk", label: "暮紫", swatch: "bg-[#24202c]" }

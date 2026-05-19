@@ -10,8 +10,6 @@
     "jsx": "react-jsx",
     "baseUrl": ".",
     "paths": {
-      "@information/core": ["packages/core/src/index.ts"],
-      "@information/core/*": ["packages/core/src/*"],
       "@information/db": ["packages/db/src/index.ts"],
       "@information/db/*": ["packages/db/src/*"],
       "@information/logger": ["packages/logger/src/index.ts"],

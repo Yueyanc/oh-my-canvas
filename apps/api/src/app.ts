@@ -5,7 +5,6 @@ import { createChildLogger, errorMeta } from "@information/logger";
 import { requireAuth } from "./middleware/auth";
 import { requestLogger } from "./middleware/request-logger";
 import { createAuthRoutes } from "./routes/auth";
-import { createRadarRoutes } from "./routes/radar";
 import { createSystemRoutes } from "./routes/system";
 
 const log = createChildLogger("api");
@@ -19,7 +18,6 @@ export function createApiApp(db: AppDb) {
 
   app.route("/api/auth", createAuthRoutes(db));
   app.route("/api", createSystemRoutes());
-  app.route("/api", createRadarRoutes(db));
 
   app.notFound((c) => c.json({ error: "Not found" }, 404));
   app.onError((error, c) => {

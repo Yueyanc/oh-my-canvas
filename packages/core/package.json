@@ -1,8 +1,0 @@
-{
-  "name": "@information/core",
-  "type": "module",
-  "private": true,
-  "exports": {
-    ".": "./src/index.ts"
-  }
-}

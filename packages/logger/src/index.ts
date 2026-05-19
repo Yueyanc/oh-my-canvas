@@ -28,7 +28,7 @@ const consoleFormat = winston.format.combine(
 export const logger = winston.createLogger({
   level,
   defaultMeta: {
-    service: "information-radar",
+    service: "project-template",
     pid: process.pid
   },
   transports: [

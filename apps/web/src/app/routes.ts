@@ -1,16 +1,11 @@
 import type { IconSvgElement } from "@hugeicons/react";
 import {
-  BookTypeIcon,
   DashboardSquare01Icon,
-  DeliveryBox01Icon,
-  InboxIcon,
-  PackageIcon,
   Settings02Icon,
-  Shield01Icon,
-  WalletCardsIcon
+  UserCircleIcon
 } from "@hugeicons/core-free-icons";
 
-export type AppRouteKey = "overview" | "hackernews" | "collect" | "signals" | "tokens" | "resources" | "settings" | "security";
+export type AppRouteKey = "overview" | "account" | "settings";
 
 export type AppRoute = {
   key: AppRouteKey;
@@ -21,13 +16,8 @@ export type AppRoute = {
 
 export const appRoutes: AppRoute[] = [
   { key: "overview", path: "/overview", label: "总览", icon: DashboardSquare01Icon },
-  { key: "hackernews", path: "/hackernews", label: "HN 阅读", icon: BookTypeIcon },
-  { key: "resources", path: "/github-trending", label: "GitHub 热榜", icon: PackageIcon },
-  { key: "collect", path: "/tasks", label: "任务", icon: DeliveryBox01Icon },
-  { key: "signals", path: "/signals", label: "信号", icon: InboxIcon },
-  { key: "tokens", path: "/tokens", label: "令牌", icon: WalletCardsIcon },
-  { key: "settings", path: "/settings", label: "设置", icon: Settings02Icon },
-  { key: "security", path: "/security", label: "安全", icon: Shield01Icon }
+  { key: "account", path: "/account", label: "账号", icon: UserCircleIcon },
+  { key: "settings", path: "/settings", label: "设置", icon: Settings02Icon }
 ];
 
 export const defaultRoute = appRoutes[0];

@@ -2,10 +2,7 @@ import React from "react";
 import { Navigate, Route, Routes } from "react-router-dom";
 import { DashboardRail } from "./components/DashboardRail";
 import { DashboardTopbar } from "./components/DashboardTopbar";
-import { GithubTrendingReaderPage } from "./components/GithubTrendingReaderPage";
-import { HackerNewsReaderPage } from "./components/HackerNewsReaderPage";
 import { OverviewPage } from "./components/OverviewPage";
-import { TasksPage } from "./components/TasksPage";
 import { appRoutes, defaultRoute, type AppRoute } from "../../app/routes";
 import type { FontKey } from "../../shared/config/fonts";
 import type { ThemeMode, ThemeScheme } from "../../shared/hooks/use-theme-mode";
@@ -87,14 +84,9 @@ function DashboardRoutes({ onRouteReset }: { onRouteReset: () => void }) {
     <Routes>
       <Route element={<Navigate replace to={defaultRoute.path} />} path="/" />
       <Route element={<OverviewPage />} path="/overview" />
-      <Route element={<HackerNewsReaderPage />} path="/hackernews" />
-      <Route element={<GithubTrendingReaderPage />} path="/github-trending" />
-      <Route element={<TasksPage />} path="/tasks" />
-      {appRoutes
-        .filter((item) => item.key !== "overview" && item.key !== "hackernews" && item.key !== "resources" && item.key !== "collect")
-        .map((item) => (
-          <Route element={<RoutePlaceholder onRouteReset={onRouteReset} route={item} />} key={item.key} path={item.path} />
-        ))}
+      {appRoutes.filter((item) => item.key !== "overview").map((item) => (
+        <Route element={<RoutePlaceholder onRouteReset={onRouteReset} route={item} />} key={item.key} path={item.path} />
+      ))}
       <Route element={<Navigate replace to={defaultRoute.path} />} path="*" />
     </Routes>
   );
@@ -105,7 +97,7 @@ function RoutePlaceholder({ route, onRouteReset }: { route: AppRoute; onRouteRes
     <section className="flex min-h-[32rem] w-full items-center justify-center rounded-panel border border-dashed border-radar-line bg-radar-surface/70 px-4 text-center">
       <div>
         <p className="text-sm font-medium text-radar-ink">{route.label}模块准备中</p>
-        <p className="mt-1 text-xs text-radar-ink-muted">当前先完成总览业务页，其它模块会沿用这套路由继续接入。</p>
+        <p className="mt-1 text-xs text-radar-ink-muted">这是模板占位页，你可以在这里接入自己的业务模块。</p>
         <button
           className="mt-4 inline-flex h-10 items-center justify-center rounded-full bg-primary px-4 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
           onClick={onRouteReset}

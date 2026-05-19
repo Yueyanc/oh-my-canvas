@@ -28,18 +28,18 @@ test("updates username and avatar without changing the password", async () => {
   const user = await ensureDefaultUser(db, { username: "admin", password: "admin123" });
 
   const updated = await updateAccountProfile(db, user.id, {
-    username: "radar-admin",
+    username: "template-admin",
     avatarUrl: "https://example.com/avatar.png"
   });
 
   expect(updated).toMatchObject({
     id: user.id,
-    username: "radar-admin",
+    username: "template-admin",
     avatarUrl: "https://example.com/avatar.png"
   });
-  expect(await verifyAccountPassword(db, "radar-admin", "admin123")).toMatchObject({
+  expect(await verifyAccountPassword(db, "template-admin", "admin123")).toMatchObject({
     id: user.id,
-    username: "radar-admin"
+    username: "template-admin"
   });
 });
 

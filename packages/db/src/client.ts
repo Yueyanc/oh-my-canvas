@@ -4,7 +4,7 @@ import { Database } from "bun:sqlite";
 import { drizzle } from "drizzle-orm/bun-sqlite";
 import * as schema from "./schema";
 
-const defaultDatabaseUrl = "file:data/radar.sqlite";
+const defaultDatabaseUrl = "file:data/app.sqlite";
 
 export function getDatabasePath(url = process.env.DATABASE_URL ?? defaultDatabaseUrl) {
   return url.startsWith("file:") ? url.slice(5) : url;
