@@ -30,6 +30,32 @@ export type OverviewItem = {
   summary: string | null;
   category: string | null;
   tags: string[];
+  quality: {
+    score: number;
+    confidence: number;
+    verdict: string;
+    assessmentSource: string;
+  } | null;
+  discussion: {
+    commentCount: number;
+    summary: string;
+    keyInsights: string[];
+    risks: string[];
+    featuredComments: Array<{
+      id: number;
+      author: string | null;
+      text: string;
+      reason: string;
+      qualityScore: number;
+      stance: string;
+      url: string;
+    }>;
+    signals: {
+      controversyScore: number;
+      expertDensityScore: number;
+      practicalValueScore: number;
+    };
+  } | null;
   firstSeenAt: string;
   lastSeenAt: string;
 };
@@ -105,6 +131,8 @@ export async function getRadarOverview(db: AppDb, options: OverviewOptions = {})
   const overviewItems = itemRows.map<OverviewItem>((item) => {
     const metrics = normalizeMetrics(item.metricsJson);
     const breakdown = normalizeMetrics(metrics?.scoreBreakdown);
+    const quality = normalizeQuality(normalizeMetrics(breakdown?.quality));
+    const discussion = normalizeDiscussion(normalizeMetrics(metrics?.aiDiscussionDigest), normalizeMetrics(metrics?.hnDiscussion));
     return {
       id: item.id,
       sourceId: item.sourceId,
@@ -124,6 +152,8 @@ export async function getRadarOverview(db: AppDb, options: OverviewOptions = {})
       summary: item.summary,
       category: item.category,
       tags: Array.isArray(item.tagsJson) ? item.tagsJson : [],
+      quality,
+      discussion,
       firstSeenAt: item.firstSeenAt,
       lastSeenAt: item.lastSeenAt
     };
@@ -237,6 +267,14 @@ function bestRank(items: OverviewItem[]) {
 }
 
 function normalizeMetrics(value: unknown): Metrics {
+  if (typeof value === "string" && value.trim()) {
+    try {
+      const parsed = JSON.parse(value) as unknown;
+      return parsed && typeof parsed === "object" && !Array.isArray(parsed) ? (parsed as Record<string, unknown>) : null;
+    } catch {
+      return null;
+    }
+  }
   return value && typeof value === "object" && !Array.isArray(value) ? (value as Record<string, unknown>) : null;
 }
 
@@ -259,4 +297,57 @@ function pickRawMetrics(metrics: Metrics): RawMetrics {
     if (typeof value === "string" && value.trim()) result[key] = value.trim();
   }
   return result;
+}
+
+function normalizeQuality(value: Metrics): OverviewItem["quality"] {
+  if (!value) return null;
+  const score = metricNumber(value, "score");
+  const confidence = metricNumber(value, "confidence");
+  return {
+    score: score ?? 0,
+    confidence: confidence ?? 0,
+    verdict: typeof value.verdict === "string" ? value.verdict : "unknown",
+    assessmentSource: typeof value.assessmentSource === "string" ? value.assessmentSource : "heuristic"
+  };
+}
+
+function normalizeDiscussion(digest: Metrics, rawDiscussion: Metrics): OverviewItem["discussion"] {
+  if (!digest) return null;
+  const featured = Array.isArray(digest.featuredComments) ? digest.featuredComments : [];
+  const signals = normalizeMetrics(digest.discussionSignals);
+  return {
+    commentCount: metricNumber(rawDiscussion, "fetchedCount") ?? metricNumber(rawDiscussion, "totalReported") ?? 0,
+    summary: typeof digest.summary === "string" ? digest.summary : "",
+    keyInsights: stringArray(digest.keyInsights).slice(0, 5),
+    risks: stringArray(digest.risks).slice(0, 4),
+    featuredComments: featured
+      .map((entry) => normalizeFeaturedComment(normalizeMetrics(entry)))
+      .filter((entry): entry is NonNullable<OverviewItem["discussion"]>["featuredComments"][number] => entry !== null)
+      .slice(0, 5),
+    signals: {
+      controversyScore: metricNumber(signals, "controversyScore") ?? 0,
+      expertDensityScore: metricNumber(signals, "expertDensityScore") ?? 0,
+      practicalValueScore: metricNumber(signals, "practicalValueScore") ?? 0
+    }
+  };
+}
+
+function normalizeFeaturedComment(value: Metrics) {
+  if (!value) return null;
+  const id = metricNumber(value, "id");
+  if (id === null) return null;
+  return {
+    id,
+    author: typeof value.author === "string" ? value.author : null,
+    text: typeof value.text === "string" ? value.text : "",
+    reason: typeof value.reason === "string" ? value.reason : "",
+    qualityScore: metricNumber(value, "qualityScore") ?? 0,
+    stance: typeof value.stance === "string" ? value.stance : "",
+    url: typeof value.url === "string" ? value.url : ""
+  };
+}
+
+function stringArray(value: unknown) {
+  if (!Array.isArray(value)) return [];
+  return value.filter((entry): entry is string => typeof entry === "string" && entry.trim().length > 0);
 }

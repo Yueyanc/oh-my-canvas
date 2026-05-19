@@ -39,36 +39,53 @@ Trigger collection from the dashboard, or run:
 bun run collect
 ```
 
-The default sources include NewsNow hot lists, RSS, GitHub search, and Hacker News. Edit `config/sources.json` to change keywords, source weights, and endpoints.
+The default source is Hacker News through the official Firebase API. Edit `config/sources.json` to change keywords, source weights, feed, and item limit.
 
-## NewsNow Sources
+## Hacker News Sources
 
-Use `type: "newsnow"` when you want TrendRadar-style hot-list collection through the NewsNow API:
+Use `type: "hackernews"` when you want Hacker News data from the official Firebase API:
 
 ```json
 {
-  "id": "newsnow-weibo",
-  "type": "newsnow",
-  "name": "Weibo Hot",
+  "id": "hn-top",
+  "type": "hackernews",
+  "name": "Hacker News Top Stories",
   "enabled": true,
-  "query": "weibo",
+  "feed": "topstories",
+  "limit": 30,
+  "comments": {
+    "enabled": true,
+    "maxTopLevel": 8,
+    "maxDepth": 2,
+    "maxTotal": 40
+  },
   "weight": 8
 }
 ```
 
-`query` is the NewsNow platform id. `url` is optional and defaults to `https://newsnow.busiyi.world/api/s`, so you can point it at a self-hosted NewsNow instance later.
+Supported feeds are `topstories`, `newstories`, `beststories`, `askstories`, `showstories`, and `jobstories`. The collector first reads the feed id list, then fetches each item from `/item/<id>.json`.
 
-The default config enables `weibo`, `zhihu`, and `baidu`. It also includes disabled presets for `douyin`, `bilibili`, `toutiao`, `thepaper`, and `ithome`; flip `enabled` to `true` when you want broader coverage.
+Collected HN comments are stored in `metricsJson.hnDiscussion`. When `AI_DISCUSSION_ENABLED=true`, the model writes a Chinese discussion digest into `metricsJson.aiDiscussionDigest`, including summary, key insights, risks, stances, featured comments, and discussion signal scores.
 
 ## Environment
 
 ```bash
 DATABASE_URL=file:data/radar.sqlite
 OPENAI_API_KEY=
-OPENAI_BASE_URL=https://api.openai.com/v1
-OPENAI_MODEL=gpt-4.1-mini
+OPENAI_BASE_URL=https://s2a.yueyanc.cn/v1
+OPENAI_MODEL=gpt-5.4-mini
+AI_QUALITY_ENABLED=true
+AI_QUALITY_MAX_PER_RUN=30
+AI_DISCUSSION_ENABLED=true
+AI_DISCUSSION_MAX_PER_RUN=8
+AI_DISCUSSION_MAX_COMMENTS=30
+OPENROUTER_API_KEY=
+EMBEDDING_PROVIDER=openrouter
+EMBEDDING_MODEL=openai/text-embedding-3-small
+EMBEDDING_DIMENSIONS=1536
+PORT=8787
 AUTO_COLLECT_ENABLED=true
-AUTO_COLLECT_INTERVAL_MS=120000
+AUTO_COLLECT_INTERVAL_MS=43200000
 AI_CLASSIFY_MAX_PER_RUN=120
 AI_CLASSIFY_MIN_SCORE=0
 LOG_LEVEL=info
@@ -85,7 +102,7 @@ The API server starts an in-process collector by default. It runs every two minu
 
 ```text
 AUTO_COLLECT_ENABLED=true
-AUTO_COLLECT_INTERVAL_MS=120000
+AUTO_COLLECT_INTERVAL_MS=43200000
 ```
 
 Manual collection and scheduled collection share one lock, so overlapping runs are skipped. Check scheduler state at:
@@ -97,19 +114,33 @@ GET /api/health
 
 ## Scoring
 
-Items use a 100-point rule score before AI ranking:
+Items use a quality-first scorecard. The top-level `items.score` is the information quality score, not a heat score. Display ranking is stored separately in `metricsJson.scoreBreakdown.ranking.score`.
 
 ```text
-score =
-  rank * 0.30
-  + engagement * 0.20
-  + freshness * 0.15
-  + persistence * 0.15
-  + source * 0.10
-  + keyword * 0.10
+quality_score =
+  factuality        * 0.25
+  + sourceReputation * 0.20
+  + evidenceStrength * 0.20
+  + completeness      * 0.15
+  + objectivity       * 0.10
+  + clarity           * 0.05
+  + freshnessFit      * 0.05
+
+ranking_score =
+  quality_score * 0.50
+  + relevance   * 0.25
+  + freshness   * 0.15
+  + popularity  * 0.10
 ```
 
-`persistence` combines same-item recurrence and event clustering. Same-item recurrence uses the previous record for the same URL. Event clustering uses lightweight title tokens, including English words and Chinese 2-3 character n-grams, to detect similar stories across sources within a recent time window. Each item stores its component scores in `metricsJson.scoreBreakdown`.
+Each score breakdown stores:
+
+- `quality`: score, confidence, verdict, dimensions, flags, and rationale.
+- `ranking`: quality-weighted display ranking.
+- `evidence`: source URL, extracted claim placeholder, citations, and check time.
+- legacy signal fields such as `relevanceScore`, `freshnessScore`, `engagementScore`, and `eventCluster` for dashboards and trend calculations.
+
+Embedding defaults to OpenRouter with `openai/text-embedding-3-small`. The provider also supports generic OpenAI-compatible HTTP responses with `data[].embedding` or `{ "embeddings": [...] }`.
 
 ## Storage And Trends
 

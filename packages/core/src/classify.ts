@@ -1,5 +1,6 @@
 import { createHash } from "node:crypto";
 import type { AiClassification } from "@information/db/schema";
+import { fetchWithTimeout } from "./ai-http";
 import type { ScoredItem } from "./types";
 
 export type ClassificationResult = {
@@ -70,43 +71,48 @@ export async function classifyItem(item: ScoredItem): Promise<ClassificationResu
 
   const baseUrl = process.env.OPENAI_BASE_URL ?? "https://api.openai.com/v1";
   const model = process.env.OPENAI_MODEL ?? "gpt-4.1-mini";
-  const response = await fetch(`${baseUrl}/chat/completions`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${apiKey}`
-    },
-    body: JSON.stringify({
-      model,
-      messages: [
-        {
-          role: "system",
-          content: `You are an information-radar classifier and Chinese localization assistant. Output JSON only, no Markdown. category must be one of: ${categories.join(", ")}. Write displayTitle, summary, and reason in Simplified Chinese. displayTitle is only for UI display: translate or rewrite the original title into natural concise Chinese, preserve product names and proper nouns when useful, and never add facts not present in the input.`
-        },
-        {
-          role: "user",
-          content: JSON.stringify({
-            title: item.title,
-            content: item.content ?? "",
-            sourceType: item.sourceType,
-            score: item.score,
-            tags: item.tags,
-            metrics: item.metrics ?? {},
-            requiredJson: {
-              category: "tech|ai|business|finance|product|open_source|security|society|entertainment|other",
-              subCategory: "short string or null",
-              relevanceScore: "0-100",
-              isNoise: "boolean",
-              displayTitle: "concise Simplified Chinese title for display",
-              summary: "one short Simplified Chinese sentence",
-              reason: "short Chinese reason"
-            }
-          })
-        }
-      ],
-      temperature: 0.1
-    })
-  });
+  let response: Response;
+  try {
+    response = await fetchWithTimeout(`${baseUrl}/chat/completions`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${apiKey}`
+      },
+      body: JSON.stringify({
+        model,
+        messages: [
+          {
+            role: "system",
+            content: `You are an information-radar classifier and Chinese localization assistant. Output JSON only, no Markdown. category must be one of: ${categories.join(", ")}. Write displayTitle, summary, and reason in Simplified Chinese. displayTitle is only for UI display: translate or rewrite the original title into natural concise Chinese, preserve product names and proper nouns when useful, and never add facts not present in the input.`
+          },
+          {
+            role: "user",
+            content: JSON.stringify({
+              title: item.title,
+              content: item.content ?? "",
+              sourceType: item.sourceType,
+              score: item.score,
+              tags: item.tags,
+              metrics: item.metrics ?? {},
+              requiredJson: {
+                category: "tech|ai|business|finance|product|open_source|security|society|entertainment|other",
+                subCategory: "short string or null",
+                relevanceScore: "0-100",
+                isNoise: "boolean",
+                displayTitle: "concise Simplified Chinese title for display",
+                summary: "one short Simplified Chinese sentence",
+                reason: "short Chinese reason"
+              }
+            })
+          }
+        ],
+        temperature: 0.1
+      })
+    });
+  } catch {
+    return { ...fallbackClassify(item, "AI classify timeout"), inputHash };
+  }
 
   if (!response.ok) return { ...fallbackClassify(item, `AI classify failed: ${response.status}`), inputHash };
 

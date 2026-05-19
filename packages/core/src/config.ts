@@ -7,9 +7,21 @@ const sourceSchema = z.object({
   type: z.enum(["rss", "github", "hackernews", "newsnow"]),
   name: z.string().min(1),
   enabled: z.boolean().default(true),
+  schedule: z.enum(["default", "github-daily", "github-weekly"]).default("default"),
   weight: z.number().optional(),
   url: z.string().url().optional(),
-  query: z.string().optional()
+  query: z.string().optional(),
+  since: z.enum(["daily", "weekly", "monthly"]).optional(),
+  feed: z.enum(["topstories", "newstories", "beststories", "askstories", "showstories", "jobstories"]).optional(),
+  limit: z.number().int().positive().max(500).optional(),
+  comments: z
+    .object({
+      enabled: z.boolean().default(false),
+      maxTopLevel: z.number().int().positive().max(50).optional(),
+      maxDepth: z.number().int().min(1).max(5).optional(),
+      maxTotal: z.number().int().positive().max(300).optional()
+    })
+    .optional()
 });
 
 const configSchema = z.object({

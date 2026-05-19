@@ -43,7 +43,7 @@ function summarizeWindow({
 }: {
   now: number;
   usageRows: Array<{
-    operation: "classification" | "summary";
+    operation: string;
     promptTokens: number;
     completionTokens: number;
     totalTokens: number;
@@ -64,6 +64,9 @@ function summarizeWindow({
       end: new Date(endMs).toISOString(),
       classificationTokens: 0,
       summaryTokens: 0,
+      qualityTokens: 0,
+      discussionTokens: 0,
+      readingTokens: 0,
       totalTokens: 0,
       calls: 0
     };
@@ -89,6 +92,9 @@ function summarizeWindow({
     bucket.totalTokens += itemTotalTokens;
     bucket.calls += 1;
     if (item.operation === "summary") bucket.summaryTokens += itemTotalTokens;
+    else if (item.operation === "quality") bucket.qualityTokens += itemTotalTokens;
+    else if (item.operation === "discussion") bucket.discussionTokens += itemTotalTokens;
+    else if (item.operation === "reading") bucket.readingTokens += itemTotalTokens;
     else bucket.classificationTokens += itemTotalTokens;
 
     const operationSummary = byOperation.get(item.operation) ?? { operation: item.operation, calls: 0, totalTokens: 0 };

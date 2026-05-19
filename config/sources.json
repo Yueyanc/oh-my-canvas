@@ -13,92 +13,61 @@
       "giveaway"
     ],
     "sourceWeights": {
-      "rss": 4,
-      "github": 7,
-      "hackernews": 6,
-      "newsnow": 8
+      "hackernews": 6
     }
   },
   "sources": [
     {
-      "id": "newsnow-zhihu",
-      "type": "newsnow",
-      "name": "知乎",
-      "enabled": true,
-      "query": "zhihu",
-      "weight": 8
-    },
-    {
-      "id": "newsnow-baidu",
-      "type": "newsnow",
-      "name": "百度",
-      "enabled": true,
-      "query": "baidu",
-      "weight": 8
-    },
-    {
-      "id": "newsnow-douyin",
-      "type": "newsnow",
-      "name": "抖音",
-      "enabled": false,
-      "query": "douyin",
-      "weight": 7
-    },
-    {
-      "id": "newsnow-bilibili",
-      "type": "newsnow",
-      "name": "Bilibili",
-      "enabled": false,
-      "query": "bilibili",
-      "weight": 7
-    },
-    {
-      "id": "newsnow-toutiao",
-      "type": "newsnow",
-      "name": "头条",
-      "enabled": false,
-      "query": "toutiao",
-      "weight": 7
-    },
-    {
-      "id": "newsnow-thepaper",
-      "type": "newsnow",
-      "name": "澎湃",
-      "enabled": false,
-      "query": "thepaper",
-      "weight": 6
-    },
-    {
-      "id": "newsnow-ithome",
-      "type": "newsnow",
-      "name": "IT之家",
-      "enabled": false,
-      "query": "ithome",
-      "weight": 6
-    },
-    {
-      "id": "hn-ai",
+      "id": "hn-top",
       "type": "hackernews",
-      "name": "Hacker News AI",
+      "name": "Hacker News Top Stories",
       "enabled": true,
-      "query": "AI agent",
+      "feed": "topstories",
+      "limit": 100,
+      "comments": {
+        "enabled": true,
+        "maxTopLevel": 8,
+        "maxDepth": 2,
+        "maxTotal": 40
+      },
       "weight": 8
     },
     {
-      "id": "github-bun",
-      "type": "github",
-      "name": "GitHub Bun Projects",
+      "id": "hn-best",
+      "type": "hackernews",
+      "name": "Hacker News Best Stories",
       "enabled": true,
-      "query": "bun sqlite language:typescript",
+      "feed": "beststories",
+      "limit": 150,
+      "comments": {
+        "enabled": true,
+        "maxTopLevel": 8,
+        "maxDepth": 2,
+        "maxTotal": 40
+      },
+      "weight": 8
+    },
+    {
+      "id": "github-trending-daily",
+      "type": "github",
+      "name": "GitHub Trending Daily",
+      "enabled": true,
+      "schedule": "github-daily",
+      "query": "trending",
+      "since": "daily",
+      "limit": 50,
       "weight": 7
     },
     {
-      "id": "vercel-blog",
-      "type": "rss",
-      "name": "Vercel Blog",
+      "id": "github-trending-weekly",
+      "type": "github",
+      "name": "GitHub Trending Weekly",
       "enabled": true,
-      "url": "https://vercel.com/blog/rss.xml",
-      "weight": 4
+      "schedule": "github-weekly",
+      "query": "trending",
+      "since": "weekly",
+      "limit": 50,
+      "weight": 7
     }
   ]
 }

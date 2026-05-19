@@ -3,6 +3,7 @@ import {
   finishRun,
   getAiClassifications,
   getScoringHistory,
+  getSummaries,
   insertObservations,
   insertAiTokenUsage,
   startRun,
@@ -15,17 +16,30 @@ import type { NewAiClassification, NewAiTokenUsage, NewItem, NewObservation, New
 import { createChildLogger, errorMeta } from "@information/logger";
 import { classifyItem, selectClassificationCandidates } from "./classify";
 import { collectSource } from "./collectors";
+import { enrichDiscussionDigests } from "./discussion";
+import { enrichReadingTranslations } from "./reading";
+import { enrichGithubRepoBriefs } from "./repo-brief";
 import { scoreItems } from "./scoring";
 import { summarizeItem } from "./summarize";
-import type { CollectedItem, CollectionResult, RadarConfig } from "./types";
+import type { AiTokenUsageRecord, CollectedItem, CollectionResult, RadarConfig } from "./types";
 
 const log = createChildLogger("ingest");
 
-export async function collectRadar(db: AppDb, config: RadarConfig): Promise<CollectionResult> {
+export async function collectRadar(
+  db: AppDb,
+  config: RadarConfig,
+  options: { schedule?: "default" | "github-daily" | "github-weekly"; sourceIds?: string[] } = {}
+): Promise<CollectionResult> {
   const runId = await startRun(db);
   try {
     const now = new Date().toISOString();
-    const enabledSources = config.sources.filter((source) => source.enabled);
+    const schedule = options.schedule ?? "default";
+    const sourceIds = options.sourceIds ? new Set(options.sourceIds) : null;
+    const enabledSources = config.sources.filter((source) => {
+      if (!source.enabled) return false;
+      if (sourceIds) return sourceIds.has(source.id);
+      return (source.schedule ?? "default") === schedule;
+    });
     log.info("radar collection run started", { runId, sourceCount: enabledSources.length });
     await upsertSources(
       db,
@@ -78,10 +92,15 @@ export async function collectRadar(db: AppDb, config: RadarConfig): Promise<Coll
       getScoringHistory(db, { since: threeDaysAgo, limit: 500 })
     ]);
     const historyByUrl = new Map([...sameItemHistory, ...recentHistory].map((item) => [item.url, item]));
-    const scored = scoreItems(collectedItems, enabledSources, config.rules, {
+    const scoredItems = await scoreItems(collectedItems, enabledSources, config.rules, {
       history: [...historyByUrl.values()]
     });
+    const discussionEnriched = await enrichDiscussionDigests(scoredItems);
+    const readingEnriched = await enrichReadingTranslations(discussionEnriched);
+    const scored = await enrichGithubRepoBriefs(readingEnriched);
     log.info("items scored", { runId, collectedCount: collectedItems.length, scoredCount: scored.length });
+
+    const tokenUsageRows: NewAiTokenUsage[] = collectPendingAiTokenUsage(scored, runId, now);
 
     const values = scored.map<NewItem>((item) => ({
       id: item.id,
@@ -93,7 +112,7 @@ export async function collectRadar(db: AppDb, config: RadarConfig): Promise<Coll
       author: item.author,
       publishedAt: item.publishedAt ? new Date(item.publishedAt).toISOString() : undefined,
       score: item.score,
-      metricsJson: item.metrics ?? {},
+      metricsJson: publicMetrics(item.metrics ?? {}),
       tagsJson: item.tags,
       rawJson: item.raw,
       firstSeenAt: now,
@@ -115,13 +134,14 @@ export async function collectRadar(db: AppDb, config: RadarConfig): Promise<Coll
         engagement: item.scoreBreakdown.engagementScore,
         score: item.score,
         scoreBreakdownJson: item.scoreBreakdown,
-        metricsJson: item.metrics ?? {}
+        metricsJson: publicMetrics(item.metrics ?? {})
       }))
     );
-    const existingClassifications = await getAiClassifications(
-      db,
-      scored.map((item) => item.id)
-    );
+    const scoredItemIds = scored.map((item) => item.id);
+    const [existingClassifications, existingSummaries] = await Promise.all([
+      getAiClassifications(db, scoredItemIds),
+      getSummaries(db, scoredItemIds)
+    ]);
     const classificationCandidates = selectClassificationCandidates(scored, existingClassifications);
     log.info("ai classification candidates selected", {
       runId,
@@ -131,7 +151,6 @@ export async function collectRadar(db: AppDb, config: RadarConfig): Promise<Coll
     const classifiedAt = new Date().toISOString();
     const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString();
     const classifications: NewAiClassification[] = [];
-    const tokenUsageRows: NewAiTokenUsage[] = [];
     for (const item of classificationCandidates) {
       const classification = await classifyItem(item);
       classifications.push({
@@ -174,7 +193,10 @@ export async function collectRadar(db: AppDb, config: RadarConfig): Promise<Coll
       log.info("ai classifications saved", { runId, classificationCount: classifications.length });
     }
 
-    const alreadySummarized = new Set(classifications.map((item) => item.itemId));
+    const alreadySummarized = new Set([
+      ...classifications.map((item) => item.itemId),
+      ...existingSummaries.map((item) => item.itemId)
+    ]);
     const topItems = [...scored]
       .filter((item) => !alreadySummarized.has(item.id))
       .sort((a, b) => b.score - a.score)
@@ -237,4 +259,66 @@ function numericMetric(metrics: Record<string, unknown> | undefined, key: string
     return Number.isFinite(parsed) ? parsed : null;
   }
   return null;
+}
+
+function collectPendingAiTokenUsage(items: Array<{ id: string; metrics?: Record<string, unknown> }>, runId: string, createdAt: string) {
+  const rows: NewAiTokenUsage[] = [];
+  for (const item of items) {
+    const pending = item.metrics?.__aiTokenUsage;
+    if (!Array.isArray(pending)) continue;
+    for (const usage of pending) {
+      if (!isAiTokenUsageRecord(usage)) continue;
+      rows.push({
+        id: crypto.randomUUID(),
+        runId,
+        itemId: item.id,
+        operation: usage.operation,
+        model: usage.model,
+        promptTokens: usage.promptTokens,
+        completionTokens: usage.completionTokens,
+        totalTokens: usage.totalTokens,
+        createdAt
+      });
+    }
+  }
+  return rows;
+}
+
+function publicMetrics(metrics: Record<string, unknown>) {
+  const { __aiTokenUsage: _pending, ...rest } = metrics;
+  return {
+    ...rest,
+    aiDiscussionDigest: stripTokenUsage(rest.aiDiscussionDigest),
+    aiReading: stripTokenUsage(rest.aiReading),
+    aiRepoBrief: stripTokenUsage(rest.aiRepoBrief)
+  };
+}
+
+function stripTokenUsage(value: unknown) {
+  if (!value || typeof value !== "object" || Array.isArray(value)) return value;
+  const { tokenUsage: _tokenUsage, ...rest } = value as Record<string, unknown>;
+  return rest;
+}
+
+function isAiTokenUsageRecord(value: unknown): value is AiTokenUsageRecord {
+  if (!value || typeof value !== "object") return false;
+  const record = value as Record<string, unknown>;
+  return (
+    isOperation(record.operation) &&
+    typeof record.model === "string" &&
+    Number.isFinite(Number(record.promptTokens)) &&
+    Number.isFinite(Number(record.completionTokens)) &&
+    Number.isFinite(Number(record.totalTokens))
+  );
+}
+
+function isOperation(value: unknown): value is AiTokenUsageRecord["operation"] {
+  return (
+    value === "classification" ||
+    value === "summary" ||
+    value === "quality" ||
+    value === "discussion" ||
+    value === "reading" ||
+    value === "embedding"
+  );
 }

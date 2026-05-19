@@ -20,7 +20,7 @@ import {
   SiYcombinator,
   SiZhihu
 } from "react-icons/si";
-import { getRadarOverview, type OverviewItem, type OverviewSource, type RadarOverview } from "../../../shared/api/client";
+import { getRadarOverview, triggerCollection, type OverviewItem, type OverviewSource, type RadarOverview } from "../../../shared/api/client";
 
 const relativeFormatter = new Intl.RelativeTimeFormat("zh-CN", { numeric: "auto" });
 const metricLabels: Record<string, string> = {
@@ -39,6 +39,7 @@ export function OverviewPage() {
   const [error, setError] = React.useState("");
   const [isLoading, setIsLoading] = React.useState(true);
   const [isRefreshing, setIsRefreshing] = React.useState(false);
+  const [isCollecting, setIsCollecting] = React.useState(false);
 
   const loadOverview = React.useCallback(async (mode: "initial" | "refresh" = "refresh") => {
     if (mode === "initial") setIsLoading(true);
@@ -60,6 +61,19 @@ export function OverviewPage() {
     return () => window.clearInterval(timer);
   }, [loadOverview]);
 
+  async function collectNow() {
+    setIsCollecting(true);
+    setError("");
+    try {
+      await triggerCollection();
+      await loadOverview("refresh");
+    } catch (cause) {
+      setError(cause instanceof Error ? cause.message : "触发抓取失败");
+    } finally {
+      setIsCollecting(false);
+    }
+  }
+
   if (isLoading) return <OverviewSkeleton />;
 
   return (
@@ -71,10 +85,10 @@ export function OverviewPage() {
             总览
           </div>
           <h1 className="mt-1.5 text-[1.7rem] font-semibold leading-tight text-radar-ink sm:text-3xl">
-            实时热榜排名
+            信息质量雷达
           </h1>
           <p className="mt-2 max-w-2xl text-sm leading-6 text-radar-ink-soft">
-            优先展示各来源原始排行与原始指标；来源内展示连续排名，原始 rank 只参与排序。
+            优先展示质量评分、HN 讨论摘要与精选评论；来源内保留原始 rank 作为参考。
           </p>
         </div>
 
@@ -84,12 +98,21 @@ export function OverviewPage() {
           <MetricPill label="更新" value={overview?.generatedAt ? formatRelativeTime(overview.generatedAt) : "暂无"} />
           <button
             className="inline-flex h-10 items-center gap-2 rounded-full border border-radar-line bg-radar-surface px-3.5 text-sm font-medium text-radar-ink-soft shadow-card transition-[background-color,color,transform] duration-200 ease-out hover:-translate-y-px hover:bg-radar-surface-soft hover:text-radar-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-70 motion-reduce:transform-none motion-reduce:transition-none"
-            disabled={isRefreshing}
+            disabled={isRefreshing || isCollecting}
             onClick={() => void loadOverview("refresh")}
             type="button"
           >
             <HugeiconsIcon icon={RefreshIcon} className={`h-4 w-4 ${isRefreshing ? "animate-spin" : ""}`} />
             {isRefreshing ? "刷新中" : "刷新"}
+          </button>
+          <button
+            className="inline-flex h-10 items-center gap-2 rounded-full bg-primary px-4 text-sm font-medium text-primary-foreground shadow-card transition-[background-color,transform] duration-200 ease-out hover:-translate-y-px hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-70 motion-reduce:transform-none motion-reduce:transition-none"
+            disabled={isCollecting}
+            onClick={() => void collectNow()}
+            type="button"
+          >
+            <HugeiconsIcon icon={RefreshIcon} className={`h-4 w-4 ${isCollecting ? "animate-spin" : ""}`} />
+            {isCollecting ? "抓取中" : "立即抓取"}
           </button>
         </div>
       </div>
@@ -170,7 +193,7 @@ function GlobalRanking({
   return (
     <section className="grid gap-3 xl:grid-cols-[minmax(0,1fr)_18rem]">
       <div className="rounded-card border border-radar-line bg-radar-surface/90 p-4 shadow-card">
-        <SectionTitle icon={FireIcon} kicker="全站" title="综合热度 Top 20" />
+        <SectionTitle icon={FireIcon} kicker="全站" title="质量精选 Top 20" />
         <div className="mt-3 grid gap-1">
           {items.length ? items.map((item, index) => <GlobalRankRow item={item} key={item.id} rank={index + 1} />) : <EmptyList />}
         </div>
@@ -197,9 +220,9 @@ function GlobalRanking({
 
 function GlobalRankRow({ item, rank }: { item: OverviewItem; rank: number }) {
   return (
-    <a className="group grid min-h-10 grid-cols-[2rem_minmax(0,1fr)_auto] items-center gap-2 rounded-xl border border-transparent px-2 py-2 transition-colors duration-150 ease-out hover:border-radar-line hover:bg-radar-surface-soft focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring motion-reduce:transition-none" href={item.url} rel="noreferrer" target="_blank">
+    <a className="group grid min-h-10 grid-cols-[2rem_minmax(0,1fr)_auto] items-start gap-2 rounded-xl border border-transparent px-2 py-2 transition-colors duration-150 ease-out hover:border-radar-line hover:bg-radar-surface-soft focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring motion-reduce:transition-none" href={item.url} rel="noreferrer" target="_blank">
       <RankMarker rank={rank} />
-      <ItemText item={item} showSource />
+      <ItemText item={item} showSource showDiscussion />
       <ItemScore item={item} />
     </a>
   );
@@ -215,7 +238,7 @@ function SourceRankRow({ item, fallbackRank }: { item: OverviewItem; fallbackRan
   );
 }
 
-function ItemText({ item, showSource = false }: { item: OverviewItem; showSource?: boolean }) {
+function ItemText({ item, showSource = false, showDiscussion = false }: { item: OverviewItem; showSource?: boolean; showDiscussion?: boolean }) {
   return (
     <div className="min-w-0">
       <div className="flex items-center gap-1.5">
@@ -227,8 +250,54 @@ function ItemText({ item, showSource = false }: { item: OverviewItem; showSource
       <div className="mt-0.5 flex min-w-0 flex-wrap items-center gap-1 text-[11px] leading-4 text-radar-ink-muted">
         {showSource ? <span className="shrink-0 font-medium text-radar-ink-soft">{item.sourceName}</span> : null}
         {item.category ? <span className="shrink-0">{item.category}</span> : null}
+        <QualityChip item={item} />
+        <DiscussionChip item={item} />
         <RawMetricChips item={item} />
       </div>
+      {showDiscussion ? <DiscussionPreview item={item} /> : null}
+    </div>
+  );
+}
+
+function QualityChip({ item }: { item: OverviewItem }) {
+  if (!item.quality) return null;
+  return (
+    <span className="rounded-full bg-primary/10 px-1.5 font-medium text-primary">
+      {qualityVerdictLabel(item.quality.verdict)} {formatCompactNumber(item.quality.score)}
+    </span>
+  );
+}
+
+function DiscussionChip({ item }: { item: OverviewItem }) {
+  if (!item.discussion) return null;
+  return (
+    <span className="rounded-full bg-radar-blue/10 px-1.5 font-medium text-radar-blue-ink">
+      精选评论 {item.discussion.featuredComments.length || item.discussion.commentCount}
+    </span>
+  );
+}
+
+function DiscussionPreview({ item }: { item: OverviewItem }) {
+  const discussion = item.discussion;
+  if (!discussion) return null;
+  const featured = discussion.featuredComments[0];
+  return (
+    <div className="mt-2 space-y-1.5 text-xs leading-5 text-radar-ink-soft">
+      {discussion.summary ? (
+        <p className="max-h-10 overflow-hidden rounded-lg bg-radar-surface-soft/70 px-2 py-1.5">
+          {discussion.summary}
+        </p>
+      ) : null}
+      {featured ? (
+        <div className="rounded-lg border border-radar-line bg-radar-surface/70 px-2 py-1.5">
+          <div className="flex min-w-0 items-center gap-1.5 text-[11px] font-medium text-radar-ink-muted">
+            <span className="truncate">{featured.author ? `@${featured.author}` : "精选评论"}</span>
+            {featured.stance ? <span className="shrink-0 rounded-full bg-radar-surface-soft px-1.5">{featured.stance}</span> : null}
+            <span className="shrink-0 tabular-nums">价值 {formatCompactNumber(featured.qualityScore)}</span>
+          </div>
+          <p className="mt-1 max-h-10 overflow-hidden text-radar-ink-soft">{featured.reason || featured.text}</p>
+        </div>
+      ) : null}
     </div>
   );
 }
@@ -252,7 +321,7 @@ function ItemScore({ item }: { item: OverviewItem }) {
   return (
     <div className="flex min-w-[3.25rem] flex-col items-end">
       <span className="text-[13px] font-semibold tabular-nums leading-5 text-radar-ink">{formatCompactNumber(item.score)}</span>
-      <span className="text-[11px] tabular-nums leading-4 text-radar-ink-muted">综合分</span>
+      <span className="text-[11px] tabular-nums leading-4 text-radar-ink-muted">质量分</span>
     </div>
   );
 }
@@ -388,6 +457,13 @@ function runStatusLabel(status: string) {
   if (status === "failed") return "失败";
   if (status === "running") return "运行中";
   return status;
+}
+
+function qualityVerdictLabel(verdict: string) {
+  if (verdict === "high") return "高质量";
+  if (verdict === "medium") return "中等";
+  if (verdict === "low") return "低质量";
+  return "待判断";
 }
 
 function formatMetricValue(key: string, value: number | string) {

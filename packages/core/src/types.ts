@@ -5,9 +5,19 @@ export type SourceConfig = {
   type: SourceType;
   name: string;
   enabled: boolean;
+  schedule?: "default" | "github-daily" | "github-weekly";
   weight?: number;
   url?: string;
   query?: string;
+  since?: "daily" | "weekly" | "monthly";
+  feed?: string;
+  limit?: number;
+  comments?: {
+    enabled?: boolean;
+    maxTopLevel?: number;
+    maxDepth?: number;
+    maxTotal?: number;
+  };
 };
 
 export type RadarRules = {
@@ -40,7 +50,72 @@ export type ScoredItem = CollectedItem & {
   scoreBreakdown: ScoreBreakdown;
 };
 
+export type AiTokenUsageRecord = {
+  operation: "classification" | "summary" | "quality" | "discussion" | "reading" | "embedding";
+  model: string;
+  promptTokens: number;
+  completionTokens: number;
+  totalTokens: number;
+};
+
+export type QualityAssessment = {
+  score: number;
+  confidence: number;
+  verdict: "high" | "medium" | "low" | "unknown";
+  assessmentSource: "heuristic" | "ai" | "hybrid";
+  model?: string;
+  checkedAt?: string;
+  dimensions: {
+    factuality: number;
+    sourceReputation: number;
+    evidenceStrength: number;
+    completeness: number;
+    objectivity: number;
+    clarity: number;
+    freshnessFit: number;
+  };
+  flags: string[];
+  rationale: string[];
+};
+
+export type RankingAssessment = {
+  score: number;
+  qualityScore: number;
+  relevanceScore: number;
+  freshnessScore: number;
+  popularityScore: number;
+  personalizationScore: number;
+};
+
+export type EvidenceAssessment = {
+  sourceUrl: string;
+  canonicalUrl: string;
+  sourceType: string;
+  sourceId: string;
+  author?: string;
+  checkedAt: string;
+  claims: Array<{
+    text: string;
+    support: "unverified" | "single-source" | "multi-source" | "conflicting";
+    confidence: number;
+  }>;
+  citations: Array<{
+    url: string;
+    sourceType: string;
+    title?: string;
+  }>;
+};
+
 export type ScoreBreakdown = {
+  quality: QualityAssessment;
+  ranking: RankingAssessment;
+  evidence: EvidenceAssessment;
+  relevanceScore: number;
+  credibilityScore: number;
+  verificationScore: number;
+  completenessScore: number;
+  popularityScore: number;
+  diversityScore: number;
   rankScore: number;
   engagementScore: number;
   freshnessScore: number;
@@ -50,6 +125,12 @@ export type ScoreBreakdown = {
   sourceScore: number;
   keywordScore: number;
   ruleScore: number;
+  scoringModel: string;
+  embedding: {
+    provider: string;
+    dimensions: number;
+    vectorHash: string;
+  };
   matchedKeywords: string[];
   eventCluster: {
     fingerprint: string;

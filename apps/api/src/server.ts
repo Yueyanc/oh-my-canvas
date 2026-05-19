@@ -5,7 +5,7 @@ import { getSchedulerState, startAutoCollector } from "./scheduler";
 
 const db = createDb();
 const log = createChildLogger("api");
-const port = Number(process.env.PORT ?? 3000);
+const port = Number(process.env.PORT ?? 8787);
 
 startAutoCollector(db);
 log.info("api server configured", { port, scheduler: getSchedulerState() });

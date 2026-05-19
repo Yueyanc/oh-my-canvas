@@ -8,43 +8,86 @@ type SchedulerState = {
   enabled: boolean;
   intervalMs: number;
   isRunning: boolean;
+  schedule: "default" | "github-daily" | "github-weekly";
   lastStartedAt?: string;
   lastFinishedAt?: string;
   lastError?: string;
 };
 
 type SchedulerGlobal = {
-  state: SchedulerState;
-  timer?: ReturnType<typeof setInterval>;
+  states: Record<"default" | "github-daily" | "github-weekly", SchedulerState>;
+  timers: Partial<Record<"default" | "github-daily" | "github-weekly", ReturnType<typeof setInterval>>>;
 };
 
-const defaultIntervalMs = 2 * 60 * 1000;
+const defaultIntervalMs = 12 * 60 * 60 * 1000;
 const configuredIntervalMs = Number(process.env.AUTO_COLLECT_INTERVAL_MS ?? defaultIntervalMs);
+const dayMs = 24 * 60 * 60 * 1000;
+const weekMs = 7 * dayMs;
 const globalKey = Symbol.for("information-radar.scheduler");
-const schedulerGlobal = (globalThis as typeof globalThis & { [globalKey]?: SchedulerGlobal })[globalKey] ?? {
-  state: {
-    enabled: process.env.AUTO_COLLECT_ENABLED !== "false",
-    intervalMs: Number.isFinite(configuredIntervalMs) && configuredIntervalMs >= 10_000 ? configuredIntervalMs : defaultIntervalMs,
-    isRunning: false
-  }
+const existingSchedulerGlobal = (globalThis as typeof globalThis & { [globalKey]?: SchedulerGlobal | { state?: SchedulerState; timer?: ReturnType<typeof setInterval> } })[globalKey];
+const schedulerGlobal: SchedulerGlobal = isSchedulerGlobal(existingSchedulerGlobal) ? existingSchedulerGlobal : {
+  states: {
+    default: {
+      schedule: "default",
+      enabled: process.env.AUTO_COLLECT_ENABLED !== "false",
+      intervalMs: Number.isFinite(configuredIntervalMs) && configuredIntervalMs >= 10_000 ? configuredIntervalMs : defaultIntervalMs,
+      isRunning: false
+    },
+    "github-daily": {
+      schedule: "github-daily",
+      enabled: process.env.GITHUB_TRENDING_DAILY_ENABLED !== "false",
+      intervalMs: dayMs,
+      isRunning: false
+    },
+    "github-weekly": {
+      schedule: "github-weekly",
+      enabled: process.env.GITHUB_TRENDING_WEEKLY_ENABLED !== "false",
+      intervalMs: weekMs,
+      isRunning: false
+    }
+  },
+  timers: {}
 };
 
 (globalThis as typeof globalThis & { [globalKey]?: SchedulerGlobal })[globalKey] = schedulerGlobal;
 
-function getState() {
-  return schedulerGlobal.state;
+type ScheduleKey = keyof SchedulerGlobal["states"];
+
+function isSchedulerGlobal(value: unknown): value is SchedulerGlobal {
+  return Boolean(
+    value &&
+      typeof value === "object" &&
+      "states" in value &&
+      "timers" in value &&
+      (value as SchedulerGlobal).states?.default &&
+      (value as SchedulerGlobal).states?.["github-daily"] &&
+      (value as SchedulerGlobal).states?.["github-weekly"]
+  );
 }
 
-function setState(next: SchedulerState) {
-  schedulerGlobal.state = next;
+function getState(schedule: ScheduleKey = "default") {
+  return schedulerGlobal.states[schedule];
+}
+
+function setState(schedule: ScheduleKey, next: SchedulerState) {
+  schedulerGlobal.states[schedule] = next;
 }
 
 export function getSchedulerState() {
-  return { ...getState(), hasTimer: Boolean(schedulerGlobal.timer) };
+  return {
+    ...getState("default"),
+    hasTimer: Boolean(schedulerGlobal.timers.default),
+    schedules: Object.fromEntries(
+      (Object.keys(schedulerGlobal.states) as ScheduleKey[]).map((schedule) => [
+        schedule,
+        { ...schedulerGlobal.states[schedule], hasTimer: Boolean(schedulerGlobal.timers[schedule]) }
+      ])
+    )
+  };
 }
 
-export async function runCollection(db: AppDb, trigger: "manual" | "scheduler") {
-  const state = getState();
+export async function runCollection(db: AppDb, trigger: "manual" | "scheduler", schedule: ScheduleKey = "default") {
+  const state = getState(schedule);
   if (state.isRunning) {
     log.warn("collection skipped because previous run is still active", { trigger, state });
     return {
@@ -55,7 +98,7 @@ export async function runCollection(db: AppDb, trigger: "manual" | "scheduler") 
     };
   }
 
-  if (trigger === "scheduler") {
+  if (trigger === "scheduler" && schedule === "default") {
     const latestRun = await getLatestRun(db);
     const latestStartedAt = latestRun?.startedAt ? new Date(latestRun.startedAt).getTime() : 0;
     const elapsedMs = latestStartedAt ? Date.now() - latestStartedAt : Number.POSITIVE_INFINITY;
@@ -75,27 +118,27 @@ export async function runCollection(db: AppDb, trigger: "manual" | "scheduler") 
     }
   }
 
-  setState({
+  setState(schedule, {
     ...state,
     isRunning: true,
     lastStartedAt: new Date().toISOString(),
     lastError: undefined
   });
-  log.info("collection started", { trigger, intervalMs: getState().intervalMs });
+  log.info("collection started", { trigger, schedule, intervalMs: getState(schedule).intervalMs });
 
   try {
     const config = await loadRadarConfig();
-    const result = await collectRadar(db, config);
-    setState({
-      ...getState(),
+    const result = await collectRadar(db, config, { schedule });
+    setState(schedule, {
+      ...getState(schedule),
       isRunning: false,
       lastFinishedAt: new Date().toISOString()
     });
     log.info("collection finished", { trigger, result, state });
     return { skipped: false, trigger, result, state: getSchedulerState() };
   } catch (error) {
-    setState({
-      ...getState(),
+    setState(schedule, {
+      ...getState(schedule),
       isRunning: false,
       lastFinishedAt: new Date().toISOString(),
       lastError: error instanceof Error ? error.message : String(error)
@@ -106,30 +149,27 @@ export async function runCollection(db: AppDb, trigger: "manual" | "scheduler") 
 }
 
 export function startAutoCollector(db: AppDb) {
-  const state = getState();
-  if (!state.enabled) return getSchedulerState();
-  if (schedulerGlobal.timer) {
-    log.info("auto collection already enabled; reusing existing timer", {
-      intervalSeconds: Math.round(state.intervalMs / 1000)
-    });
-    return getSchedulerState();
+  for (const schedule of Object.keys(schedulerGlobal.states) as ScheduleKey[]) {
+    const state = getState(schedule);
+    if (!state.enabled || schedulerGlobal.timers[schedule]) continue;
+    schedulerGlobal.timers[schedule] = setInterval(() => {
+      runCollection(db, "scheduler", schedule).catch((error) => {
+        log.error("auto collection failed", { schedule, ...errorMeta(error) });
+      });
+    }, state.intervalMs);
+    log.info("auto collection enabled", { schedule, intervalSeconds: Math.round(state.intervalMs / 1000) });
   }
-
-  schedulerGlobal.timer = setInterval(() => {
-    runCollection(db, "scheduler").catch((error) => {
-      log.error("auto collection failed", errorMeta(error));
-    });
-  }, state.intervalMs);
-
-  log.info("auto collection enabled", { intervalSeconds: Math.round(state.intervalMs / 1000) });
   return getSchedulerState();
 }
 
 export function stopAutoCollector() {
-  if (schedulerGlobal.timer) {
-    clearInterval(schedulerGlobal.timer);
-    schedulerGlobal.timer = undefined;
-    log.info("auto collection stopped");
+  for (const schedule of Object.keys(schedulerGlobal.timers) as ScheduleKey[]) {
+    const timer = schedulerGlobal.timers[schedule];
+    if (timer) {
+      clearInterval(timer);
+      schedulerGlobal.timers[schedule] = undefined;
+      log.info("auto collection stopped", { schedule });
+    }
   }
   return getSchedulerState();
 }

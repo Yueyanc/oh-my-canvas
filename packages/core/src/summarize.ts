@@ -1,4 +1,5 @@
 import type { ScoredItem } from "./types";
+import { fetchWithTimeout } from "./ai-http";
 
 export type SummaryResult = {
   summary: string;
@@ -23,27 +24,36 @@ export async function summarizeItem(item: ScoredItem): Promise<SummaryResult> {
 
   const baseUrl = process.env.OPENAI_BASE_URL ?? "https://api.openai.com/v1";
   const model = process.env.OPENAI_MODEL ?? "gpt-4.1-mini";
-  const response = await fetch(`${baseUrl}/chat/completions`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${apiKey}`
-    },
-    body: JSON.stringify({
-      model,
-      messages: [
-        {
-          role: "system",
-          content: "You are a Chinese summarizer for an information radar. Always write in Simplified Chinese. Summarize technology and trend signals clearly and briefly."
-        },
-        {
-          role: "user",
-          content: `Title: ${item.title}\nSource: ${item.sourceType}\nContent: ${item.content ?? ""}\nMetrics: ${JSON.stringify(item.metrics ?? {})}\nPlease write one concise Simplified Chinese sentence and explain why it matters in Chinese.`
-        }
-      ],
-      temperature: 0.2
-    })
-  });
+  let response: Response;
+  try {
+    response = await fetchWithTimeout(`${baseUrl}/chat/completions`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${apiKey}`
+      },
+      body: JSON.stringify({
+        model,
+        messages: [
+          {
+            role: "system",
+            content: "You are a Chinese summarizer for an information radar. Always write in Simplified Chinese. Summarize technology and trend signals clearly and briefly."
+          },
+          {
+            role: "user",
+            content: `Title: ${item.title}\nSource: ${item.sourceType}\nContent: ${item.content ?? ""}\nMetrics: ${JSON.stringify(item.metrics ?? {})}\nPlease write one concise Simplified Chinese sentence and explain why it matters in Chinese.`
+          }
+        ],
+        temperature: 0.2
+      })
+    });
+  } catch {
+    return {
+      summary: fallbackSummary(item),
+      reason: "智能摘要超时，已使用本地摘要",
+      model: "rule-based"
+    };
+  }
 
   if (!response.ok) {
     return {

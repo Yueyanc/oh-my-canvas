@@ -26,6 +26,11 @@ export async function getAiClassifications(db: AppDb, itemIds: string[]) {
   return db.select().from(aiClassifications).where(inArray(aiClassifications.itemId, itemIds));
 }
 
+export async function getSummaries(db: AppDb, itemIds: string[]) {
+  if (itemIds.length === 0) return [];
+  return db.select().from(summaries).where(inArray(summaries.itemId, itemIds));
+}
+
 export async function upsertAiClassifications(db: AppDb, values: NewAiClassification[]) {
   if (values.length === 0) return;
   await db

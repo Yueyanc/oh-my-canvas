@@ -39,6 +39,32 @@ export type OverviewItem = {
   summary: string | null;
   category: string | null;
   tags: string[];
+  quality: {
+    score: number;
+    confidence: number;
+    verdict: string;
+    assessmentSource: string;
+  } | null;
+  discussion: {
+    commentCount: number;
+    summary: string;
+    keyInsights: string[];
+    risks: string[];
+    featuredComments: Array<{
+      id: number;
+      author: string | null;
+      text: string;
+      reason: string;
+      qualityScore: number;
+      stance: string;
+      url: string;
+    }>;
+    signals: {
+      controversyScore: number;
+      expertDensityScore: number;
+      practicalValueScore: number;
+    };
+  } | null;
   firstSeenAt: string;
   lastSeenAt: string;
 };
@@ -76,6 +102,92 @@ export type RadarOverview = {
   sources: OverviewSource[];
 };
 
+export type HackerNewsReaderItem = {
+  id: string;
+  title: string;
+  displayTitle: string | null;
+  url: string;
+  author: string | null;
+  publishedAt: string | null;
+  score: number;
+  summary: string | null;
+  category: string | null;
+  rank: number | null;
+  points: number | null;
+  commentCount: number;
+  feeds: string[];
+  reading: {
+    translatedTitle: string;
+    translatedBody: string;
+    keyPoints: string[];
+    contextNotes: string[];
+    sourceLimitations: string;
+    sourceTextAvailable: boolean;
+    generatedAt: string | null;
+    model: string | null;
+  } | null;
+  discussion: {
+    summary: string;
+    keyInsights: string[];
+    risks: string[];
+    featuredComments: Array<{
+      id: number;
+      author: string | null;
+      text: string;
+      reason: string;
+      qualityScore: number;
+      stance: string;
+      url: string;
+    }>;
+  } | null;
+  quality: {
+    score: number;
+    confidence: number;
+    verdict: string;
+  } | null;
+  commentsUrl: string | null;
+  firstSeenAt: string;
+  lastSeenAt: string;
+};
+
+export type GithubTrendingReaderItem = {
+  id: string;
+  title: string;
+  displayTitle: string | null;
+  url: string;
+  author: string | null;
+  publishedAt: string | null;
+  score: number;
+  summary: string | null;
+  category: string | null;
+  rank: number | null;
+  period: string;
+  stars: number;
+  forks: number;
+  currentPeriodStars: number;
+  language: string | null;
+  avatar: string | null;
+  repository: string;
+  brief: {
+    chineseName: string;
+    overview: string;
+    highlights: string[];
+    useCases: string[];
+    concerns: string[];
+    projectStage: string;
+    sourceLimitations: string;
+    generatedAt: string | null;
+    model: string | null;
+  } | null;
+  quality: {
+    score: number;
+    confidence: number;
+    verdict: string;
+  } | null;
+  firstSeenAt: string;
+  lastSeenAt: string;
+};
+
 export type CollectRun = {
   id: string;
   status: "running" | "success" | "failed" | string;
@@ -87,11 +199,42 @@ export type CollectRun = {
   error: string | null;
 };
 
+export type SchedulerTaskState = {
+  schedule: "default" | "github-daily" | "github-weekly" | string;
+  enabled: boolean;
+  intervalMs: number;
+  isRunning: boolean;
+  hasTimer: boolean;
+  lastStartedAt?: string;
+  lastFinishedAt?: string;
+  lastError?: string;
+};
+
+export type SchedulerState = SchedulerTaskState & {
+  schedules?: Record<string, SchedulerTaskState>;
+};
+
 export async function getRadarOverview(): Promise<RadarOverview> {
   const response = await authorizedFetch("/api/radar/overview?perSourceLimit=8&globalLimit=20");
   const payload = await response.json();
   if (!response.ok) throw new Error(payload.error ?? "无法获取总览数据");
   return payload;
+}
+
+export async function getHackerNewsReaderItems(limit = 60): Promise<HackerNewsReaderItem[]> {
+  const response = await authorizedFetch(`/api/hackernews/reader?limit=${limit}`);
+  const payload = await response.json();
+  if (!response.ok) throw new Error(payload.error ?? "无法获取 Hacker News 阅读数据");
+  return payload.items ?? [];
+}
+
+export async function getGithubTrendingReaderItems(period: "all" | "daily" | "weekly" = "all", limit = 60): Promise<GithubTrendingReaderItem[]> {
+  const params = new URLSearchParams({ limit: String(limit) });
+  if (period !== "all") params.set("period", period);
+  const response = await authorizedFetch(`/api/github/trending/reader?${params.toString()}`);
+  const payload = await response.json();
+  if (!response.ok) throw new Error(payload.error ?? "无法获取 GitHub 热榜阅读数据");
+  return payload.items ?? [];
 }
 
 export async function getCollectRuns(): Promise<CollectRun[]> {
@@ -101,10 +244,24 @@ export async function getCollectRuns(): Promise<CollectRun[]> {
   return payload.runs ?? [];
 }
 
+export async function getSchedulerState(): Promise<SchedulerState> {
+  const response = await authorizedFetch("/api/scheduler");
+  const payload = await response.json();
+  if (!response.ok) throw new Error(payload.error ?? "无法获取任务状态");
+  return payload;
+}
+
 export async function triggerCollection() {
   const response = await authorizedFetch("/api/collect", { method: "POST" });
   const payload = await response.json();
   if (!response.ok) throw new Error(payload.error ?? "触发采集失败");
+  return payload;
+}
+
+export async function triggerGithubTrendingCollection(period: "daily" | "weekly") {
+  const response = await authorizedFetch(`/api/github/trending/collect/${period}`, { method: "POST" });
+  const payload = await response.json();
+  if (!response.ok) throw new Error(payload.error ?? "触发 GitHub 热榜采集失败");
   return payload;
 }
 

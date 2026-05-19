@@ -159,7 +159,7 @@ export const aiTokenUsage = sqliteTable(
     id: text("id").primaryKey(),
     runId: text("run_id").references(() => runs.id, { onDelete: "set null" }),
     itemId: text("item_id").references(() => items.id, { onDelete: "set null" }),
-    operation: text("operation", { enum: ["classification", "summary"] }).notNull(),
+    operation: text("operation", { enum: ["classification", "summary", "quality", "discussion", "reading", "embedding"] }).notNull(),
     model: text("model").notNull(),
     promptTokens: integer("prompt_tokens").notNull().default(0),
     completionTokens: integer("completion_tokens").notNull().default(0),

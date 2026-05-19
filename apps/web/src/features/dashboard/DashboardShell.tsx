@@ -2,8 +2,10 @@ import React from "react";
 import { Navigate, Route, Routes } from "react-router-dom";
 import { DashboardRail } from "./components/DashboardRail";
 import { DashboardTopbar } from "./components/DashboardTopbar";
-import { CollectPage } from "./components/CollectPage";
+import { GithubTrendingReaderPage } from "./components/GithubTrendingReaderPage";
+import { HackerNewsReaderPage } from "./components/HackerNewsReaderPage";
 import { OverviewPage } from "./components/OverviewPage";
+import { TasksPage } from "./components/TasksPage";
 import { appRoutes, defaultRoute, type AppRoute } from "../../app/routes";
 import type { FontKey } from "../../shared/config/fonts";
 import type { ThemeMode, ThemeScheme } from "../../shared/hooks/use-theme-mode";
@@ -85,9 +87,11 @@ function DashboardRoutes({ onRouteReset }: { onRouteReset: () => void }) {
     <Routes>
       <Route element={<Navigate replace to={defaultRoute.path} />} path="/" />
       <Route element={<OverviewPage />} path="/overview" />
-      <Route element={<CollectPage />} path="/collect" />
+      <Route element={<HackerNewsReaderPage />} path="/hackernews" />
+      <Route element={<GithubTrendingReaderPage />} path="/github-trending" />
+      <Route element={<TasksPage />} path="/tasks" />
       {appRoutes
-        .filter((item) => item.key !== "overview" && item.key !== "collect")
+        .filter((item) => item.key !== "overview" && item.key !== "hackernews" && item.key !== "resources" && item.key !== "collect")
         .map((item) => (
           <Route element={<RoutePlaceholder onRouteReset={onRouteReset} route={item} />} key={item.key} path={item.path} />
         ))}

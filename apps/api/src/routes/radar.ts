@@ -2,7 +2,7 @@ import { Hono } from "hono";
 import { zValidator } from "@hono/zod-validator";
 import { z } from "zod";
 import { loadRadarConfig } from "@information/core";
-import { getAiTokenUsageSummary, getRadarOverview, listItems, listRuns, type AppDb } from "@information/db";
+import { getAiTokenUsageSummary, getRadarOverview, listGithubTrendingReaderItems, listHackerNewsReaderItems, listItems, listRuns, type AppDb } from "@information/db";
 import { runCollection } from "../scheduler";
 
 export function createRadarRoutes(db: AppDb) {
@@ -24,6 +24,37 @@ export function createRadarRoutes(db: AppDb) {
     async (c) => {
       const query = c.req.valid("query");
       const items = await listItems(db, query);
+      return c.json({ items });
+    }
+  );
+
+  routes.get(
+    "/hackernews/reader",
+    zValidator(
+      "query",
+      z.object({
+        limit: z.coerce.number().min(1).max(100).optional()
+      })
+    ),
+    async (c) => {
+      const query = c.req.valid("query");
+      const items = await listHackerNewsReaderItems(db, query);
+      return c.json({ items });
+    }
+  );
+
+  routes.get(
+    "/github/trending/reader",
+    zValidator(
+      "query",
+      z.object({
+        limit: z.coerce.number().min(1).max(100).optional(),
+        period: z.enum(["daily", "weekly"]).optional()
+      })
+    ),
+    async (c) => {
+      const query = c.req.valid("query");
+      const items = await listGithubTrendingReaderItems(db, query);
       return c.json({ items });
     }
   );
@@ -56,6 +87,13 @@ export function createRadarRoutes(db: AppDb) {
 
   routes.post("/collect", async (c) => {
     const result = await runCollection(db, "manual");
+    return c.json(result);
+  });
+
+  routes.post("/github/trending/collect/:period", async (c) => {
+    const period = c.req.param("period");
+    if (period !== "daily" && period !== "weekly") return c.json({ error: "Unsupported GitHub trending period" }, 400);
+    const result = await runCollection(db, "manual", period === "daily" ? "github-daily" : "github-weekly");
     return c.json(result);
   });
 
