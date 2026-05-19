@@ -1,5 +1,5 @@
 import { expect, test } from "bun:test";
-import { createDb } from "@information/db";
+import { createDb } from "@template/db";
 import {
   changePassword,
   ensureDefaultUser,
@@ -28,18 +28,18 @@ test("updates username and avatar without changing the password", async () => {
   const user = await ensureDefaultUser(db, { username: "admin", password: "admin123" });
 
   const updated = await updateAccountProfile(db, user.id, {
-    username: "template-admin",
+    username: "updated-admin",
     avatarUrl: "https://example.com/avatar.png"
   });
 
   expect(updated).toMatchObject({
     id: user.id,
-    username: "template-admin",
+    username: "updated-admin",
     avatarUrl: "https://example.com/avatar.png"
   });
-  expect(await verifyAccountPassword(db, "template-admin", "admin123")).toMatchObject({
+  expect(await verifyAccountPassword(db, "updated-admin", "admin123")).toMatchObject({
     id: user.id,
-    username: "template-admin"
+    username: "updated-admin"
   });
 });
 

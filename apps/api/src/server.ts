@@ -1,6 +1,6 @@
 import { createApiApp } from "./app";
-import { createDb } from "@information/db";
-import { createChildLogger } from "@information/logger";
+import { createDb } from "@template/db";
+import { createChildLogger } from "@template/logger";
 
 const db = createDb();
 const log = createChildLogger("api");

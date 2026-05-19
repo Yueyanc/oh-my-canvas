@@ -1,5 +1,5 @@
 import { expect, test } from "bun:test";
-import { createDb } from "@information/db";
+import { createDb } from "@template/db";
 import { createApiApp } from "../app";
 import { ensureDefaultUser } from "../auth/accounts";
 
@@ -18,17 +18,17 @@ test("updates the current account profile through authenticated routes", async (
   const updateResponse = await app.request("/api/auth/account", {
     method: "PATCH",
     headers: { "Content-Type": "application/json", cookie },
-    body: JSON.stringify({ username: "template-admin", avatarUrl: "https://example.com/avatar.png" })
+    body: JSON.stringify({ username: "updated-admin", avatarUrl: "https://example.com/avatar.png" })
   });
   expect(updateResponse.status).toBe(200);
   expect(await updateResponse.json()).toMatchObject({
-    user: { username: "template-admin", avatarUrl: "https://example.com/avatar.png" }
+    user: { username: "updated-admin", avatarUrl: "https://example.com/avatar.png" }
   });
 
   const meResponse = await app.request("/api/auth/me", { headers: { cookie } });
   expect(await meResponse.json()).toMatchObject({
     authenticated: true,
-    user: { username: "template-admin", avatarUrl: "https://example.com/avatar.png" }
+    user: { username: "updated-admin", avatarUrl: "https://example.com/avatar.png" }
   });
 });
 

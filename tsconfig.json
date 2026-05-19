@@ -10,10 +10,10 @@
     "jsx": "react-jsx",
     "baseUrl": ".",
     "paths": {
-      "@information/db": ["packages/db/src/index.ts"],
-      "@information/db/*": ["packages/db/src/*"],
-      "@information/logger": ["packages/logger/src/index.ts"],
-      "@information/logger/*": ["packages/logger/src/*"]
+      "@template/db": ["packages/db/src/index.ts"],
+      "@template/db/*": ["packages/db/src/*"],
+      "@template/logger": ["packages/logger/src/index.ts"],
+      "@template/logger/*": ["packages/logger/src/*"]
     }
   },
   "include": ["apps", "packages", "drizzle.config.ts"]

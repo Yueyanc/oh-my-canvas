@@ -1,7 +1,7 @@
 import React from "react";
 import { defaultFontKey, fontOptions, type FontKey } from "../config/fonts";
 
-const storageKey = "information-dashboard-font";
+const storageKey = "template-dashboard-font";
 
 export function useFontPreference() {
   const [fontKey, setFontKey] = React.useState<FontKey>(() => {

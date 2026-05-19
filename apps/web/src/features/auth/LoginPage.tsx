@@ -163,17 +163,17 @@ export function LoginPage({ onLogin }: { onLogin: (username: string, password: s
   }
 
   return (
-    <main className="relative flex min-h-screen overflow-hidden bg-radar-canvas px-4 py-10 text-radar-ink">
+    <main className="relative flex min-h-screen overflow-hidden bg-app-canvas px-4 py-10 text-app-ink">
       <BouncingGlowOrbs reducedMotion={shouldReduceMotion} />
       <div className="pointer-events-none absolute inset-0 login-field" aria-hidden="true">
         <motion.div
           animate={shouldReduceMotion ? undefined : { opacity: [0, 0.68, 0], scale: [0.86, 1, 1.1] }}
-          className="absolute left-1/2 top-1/2 h-[34rem] w-[34rem] -translate-x-1/2 -translate-y-1/2 rounded-full border border-radar-line/70"
+          className="absolute left-1/2 top-1/2 h-[34rem] w-[34rem] -translate-x-1/2 -translate-y-1/2 rounded-full border border-app-line/70"
           transition={{ duration: 7, ease: [0.22, 1, 0.36, 1], repeat: Infinity }}
         />
         <motion.div
           animate={shouldReduceMotion ? undefined : { opacity: [0, 0.52, 0], scale: [0.82, 1, 1.08] }}
-          className="absolute left-1/2 top-1/2 h-[22rem] w-[22rem] -translate-x-1/2 -translate-y-1/2 rounded-full border border-radar-line/60"
+          className="absolute left-1/2 top-1/2 h-[22rem] w-[22rem] -translate-x-1/2 -translate-y-1/2 rounded-full border border-app-line/60"
           transition={{ delay: 1.6, duration: 7, ease: [0.22, 1, 0.36, 1], repeat: Infinity }}
         />
       </div>
@@ -186,30 +186,30 @@ export function LoginPage({ onLogin }: { onLogin: (username: string, password: s
           className="w-full max-w-[25rem]"
         >
           <Card className="relative w-full border-white/70 bg-white/[0.12] backdrop-blur-[52px] backdrop-saturate-150 [background:linear-gradient(135deg,rgb(255_255_255_/_0.34),rgb(255_255_255_/_0.1))] [box-shadow:0_36px_120px_rgb(35_38_32_/_0.16),0_14px_36px_rgb(35_38_32_/_0.08),inset_0_1px_0_rgb(255_255_255_/_0.65)]">
-            <div className="absolute right-7 top-7 rounded-full border border-white/60 bg-white/30 px-3 py-1 text-xs font-medium leading-none text-radar-ink-soft backdrop-blur-xl">
+            <div className="absolute right-7 top-7 rounded-full border border-white/60 bg-white/30 px-3 py-1 text-xs font-medium leading-none text-app-ink-soft backdrop-blur-xl">
               安全入口
             </div>
             <CardHeader className="space-y-0 p-8 pb-6 pr-28">
               <div className="space-y-2.5">
-                <CardTitle className="text-[1.7rem] font-semibold leading-tight tracking-normal text-radar-ink">
-                  登录项目模板
+                <CardTitle className="text-[1.7rem] font-semibold leading-tight tracking-normal text-app-ink">
+                  登录应用面板
                 </CardTitle>
-                <CardDescription className="max-w-[15rem] text-sm leading-6 text-radar-ink-soft">
-                  输入账号密码，进入你的项目面板。
+                <CardDescription className="max-w-[15rem] text-sm leading-6 text-app-ink-soft">
+                  输入账号密码，进入基础面板。
                 </CardDescription>
               </div>
             </CardHeader>
             <CardContent className="p-8 pt-0">
               <form className="space-y-5" onSubmit={submit}>
                 <label className="block space-y-2">
-                  <span className="text-[13px] font-medium leading-none text-radar-ink-soft">用户名</span>
+                  <span className="text-[13px] font-medium leading-none text-app-ink-soft">用户名</span>
                   <div className="relative">
                     <HugeiconsIcon
                       icon={UserCircleIcon}
-                      className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-radar-ink-muted"
+                      className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-app-ink-muted"
                     />
                     <Input
-                      className="h-12 border-white/60 bg-white/45 pl-11 text-[15px] shadow-inner backdrop-blur-xl placeholder:text-radar-ink-muted focus-visible:ring-ring"
+                      className="h-12 border-white/60 bg-white/45 pl-11 text-[15px] shadow-inner backdrop-blur-xl placeholder:text-app-ink-muted focus-visible:ring-ring"
                       placeholder="输入用户名"
                       value={username}
                       onChange={(event) => setUsername(event.target.value)}
@@ -218,14 +218,14 @@ export function LoginPage({ onLogin }: { onLogin: (username: string, password: s
                 </label>
 
                 <label className="block space-y-2">
-                  <span className="text-[13px] font-medium leading-none text-radar-ink-soft">密码</span>
+                  <span className="text-[13px] font-medium leading-none text-app-ink-soft">密码</span>
                   <div className="relative">
                     <HugeiconsIcon
                       icon={LockPasswordIcon}
-                      className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-radar-ink-muted"
+                      className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-app-ink-muted"
                     />
                     <Input
-                      className="h-12 border-white/60 bg-white/45 pl-11 pr-11 text-[15px] shadow-inner backdrop-blur-xl placeholder:text-radar-ink-muted focus-visible:ring-ring"
+                      className="h-12 border-white/60 bg-white/45 pl-11 pr-11 text-[15px] shadow-inner backdrop-blur-xl placeholder:text-app-ink-muted focus-visible:ring-ring"
                       placeholder="输入密码"
                       type={isPasswordVisible ? "text" : "password"}
                       value={password}
@@ -233,7 +233,7 @@ export function LoginPage({ onLogin }: { onLogin: (username: string, password: s
                     />
                     <button
                       aria-label={isPasswordVisible ? "隐藏密码" : "显示密码"}
-                      className="absolute right-2 top-1/2 flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-full text-radar-ink-muted transition-[background-color,color,box-shadow,transform] duration-200 ease-out hover:bg-white/45 hover:text-radar-ink-soft hover:shadow-[0_6px_18px_rgb(35_38_32_/_0.08)] active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                      className="absolute right-2 top-1/2 flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-full text-app-ink-muted transition-[background-color,color,box-shadow,transform] duration-200 ease-out hover:bg-white/45 hover:text-app-ink-soft hover:shadow-[0_6px_18px_rgb(35_38_32_/_0.08)] active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
                       onClick={() => setIsPasswordVisible((visible) => !visible)}
                       type="button"
                     >

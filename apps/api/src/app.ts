@@ -1,7 +1,7 @@
 import { Hono } from "hono";
 import { cors } from "hono/cors";
-import type { AppDb } from "@information/db";
-import { createChildLogger, errorMeta } from "@information/logger";
+import type { AppDb } from "@template/db";
+import { createChildLogger, errorMeta } from "@template/logger";
 import { requireAuth } from "./middleware/auth";
 import { requestLogger } from "./middleware/request-logger";
 import { createAuthRoutes } from "./routes/auth";

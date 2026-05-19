@@ -1,6 +1,6 @@
-# Project Template
+# Application Shell
 
-A minimal full-stack Bun template with:
+A minimal full-stack Bun application shell with:
 
 - Hono API server
 - SQLite + Drizzle

@@ -1,5 +1,5 @@
 import { createMiddleware } from "hono/factory";
-import type { AppDb } from "@information/db";
+import type { AppDb } from "@template/db";
 import { getRequestSession } from "../auth/session";
 
 const publicApiPaths = new Set(["/api/health", "/api/auth/login", "/api/auth/logout", "/api/auth/me"]);

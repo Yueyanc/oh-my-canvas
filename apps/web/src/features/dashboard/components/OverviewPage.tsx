@@ -27,25 +27,25 @@ const features = [
 export function OverviewPage() {
   return (
     <section className="flex w-full flex-col gap-5">
-      <div className="rounded-card border border-radar-line bg-radar-surface/90 p-6 shadow-card">
-        <div className="flex items-center gap-2 text-xs font-semibold uppercase text-radar-ink-muted">
+      <div className="rounded-card border border-app-line bg-app-surface/90 p-6 shadow-card">
+        <div className="flex items-center gap-2 text-xs font-semibold uppercase text-app-ink-muted">
           <HugeiconsIcon icon={DashboardSquare01Icon} className="h-4 w-4 text-primary" />
-          Project Template
+          Application Shell
         </div>
-        <h1 className="mt-3 text-[1.8rem] font-semibold leading-tight text-radar-ink sm:text-3xl">
-          基础项目模板
+        <h1 className="mt-3 text-[1.8rem] font-semibold leading-tight text-app-ink sm:text-3xl">
+          基础应用模板
         </h1>
-        <p className="mt-3 max-w-2xl text-sm leading-6 text-radar-ink-soft">
-          这是一个干净的全栈模板，保留登录、权限、账户设置和基础后台面板。你可以从这里继续接入自己的业务模块。
+        <p className="mt-3 max-w-2xl text-sm leading-6 text-app-ink-soft">
+          这是一个干净的全栈应用基础壳，保留登录、权限、账户设置和基础后台面板。你可以从这里继续接入自己的功能模块。
         </p>
       </div>
 
       <div className="grid gap-3 lg:grid-cols-3">
         {features.map((feature) => (
-          <article className="rounded-card border border-radar-line bg-radar-surface/90 p-4 shadow-card" key={feature.title}>
+          <article className="rounded-card border border-app-line bg-app-surface/90 p-4 shadow-card" key={feature.title}>
             <HugeiconsIcon icon={feature.icon} className="h-5 w-5 text-primary" />
-            <h2 className="mt-3 text-sm font-semibold text-radar-ink">{feature.title}</h2>
-            <p className="mt-2 text-sm leading-6 text-radar-ink-soft">{feature.description}</p>
+            <h2 className="mt-3 text-sm font-semibold text-app-ink">{feature.title}</h2>
+            <p className="mt-2 text-sm leading-6 text-app-ink-soft">{feature.description}</p>
           </article>
         ))}
       </div>

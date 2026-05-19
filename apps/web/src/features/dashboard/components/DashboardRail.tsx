@@ -18,8 +18,8 @@ export function DashboardRail({
       <div
         className={
           isExpanded
-            ? "flex h-14 w-14 items-center justify-center text-radar-ink-soft opacity-100 transition-opacity duration-150 ease-out"
-            : "pointer-events-none flex h-14 w-14 items-center justify-center text-radar-ink-soft opacity-0 transition-opacity duration-150 ease-out"
+            ? "flex h-14 w-14 items-center justify-center text-app-ink-soft opacity-100 transition-opacity duration-150 ease-out"
+            : "pointer-events-none flex h-14 w-14 items-center justify-center text-app-ink-soft opacity-0 transition-opacity duration-150 ease-out"
         }
       >
         <span className="h-14 w-14 shrink-0" />
@@ -41,10 +41,10 @@ export function DashboardRail({
                   isExpanded
                     ? isActive
                       ? "flex h-10 w-full items-center gap-3 overflow-hidden rounded-full bg-primary text-primary-foreground shadow-sm transition-[width,background-color,color] duration-300 ease-out"
-                      : "flex h-10 w-full items-center gap-3 overflow-hidden rounded-full text-radar-ink-muted transition-[width,background-color,color] duration-300 ease-out group-hover:bg-radar-surface group-hover:text-radar-ink"
+                      : "flex h-10 w-full items-center gap-3 overflow-hidden rounded-full text-app-ink-muted transition-[width,background-color,color] duration-300 ease-out group-hover:bg-app-surface group-hover:text-app-ink"
                     : isActive
                       ? "flex h-10 w-10 items-center gap-0 overflow-hidden rounded-full bg-primary text-primary-foreground shadow-sm transition-[width,background-color,color] duration-300 ease-out"
-                      : "flex h-10 w-10 items-center gap-0 overflow-hidden rounded-full text-radar-ink-muted transition-[width,background-color,color] duration-300 ease-out group-hover:bg-radar-surface group-hover:text-radar-ink"
+                      : "flex h-10 w-10 items-center gap-0 overflow-hidden rounded-full text-app-ink-muted transition-[width,background-color,color] duration-300 ease-out group-hover:bg-app-surface group-hover:text-app-ink"
                 }
               >
                 <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full">

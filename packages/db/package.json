@@ -1,5 +1,5 @@
 {
-  "name": "@information/db",
+  "name": "@template/db",
   "type": "module",
   "private": true,
   "exports": {

@@ -1,6 +1,6 @@
 import { eq, sql } from "drizzle-orm";
-import type { AppDb, User } from "@information/db";
-import { users } from "@information/db";
+import type { AppDb, User } from "@template/db";
+import { users } from "@template/db";
 
 export type PublicAccount = Pick<User, "id" | "username" | "avatarUrl">;
 

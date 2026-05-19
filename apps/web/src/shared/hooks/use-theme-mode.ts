@@ -1,22 +1,22 @@
 import React from "react";
 
 export type ThemeMode = "light" | "dark";
-export type ThemeScheme = "radar" | "sage" | "ocean" | "dusk";
+export type ThemeScheme = "base" | "sage" | "ocean" | "dusk";
 
 export const themeOptions: Array<{
   key: ThemeScheme;
   label: string;
   swatch: string;
 }> = [
-  { key: "radar", label: "基础", swatch: "bg-[#f8f5ed]" },
+  { key: "base", label: "基础", swatch: "bg-[#f8f5ed]" },
   { key: "sage", label: "鼠尾草", swatch: "bg-[#dfead9]" },
   { key: "ocean", label: "雾蓝", swatch: "bg-[#dce9ef]" },
   { key: "dusk", label: "暮紫", swatch: "bg-[#24202c]" }
 ];
 
-const schemeStorageKey = "information-dashboard-theme-scheme";
-const modeStorageKey = "information-dashboard-theme-mode";
-const legacyStorageKey = "information-dashboard-theme";
+const schemeStorageKey = "template-dashboard-theme-scheme";
+const modeStorageKey = "template-dashboard-theme-mode";
+const legacyStorageKey = "template-dashboard-theme";
 
 function isThemeScheme(value: string | null): value is ThemeScheme {
   return themeOptions.some((option) => option.key === value);
@@ -27,11 +27,11 @@ function isThemeMode(value: string | null): value is ThemeMode {
 }
 
 function getInitialScheme(): ThemeScheme {
-  if (typeof window === "undefined") return "radar";
+  if (typeof window === "undefined") return "base";
   const stored = window.localStorage.getItem(schemeStorageKey);
   if (isThemeScheme(stored)) return stored;
   const legacy = window.localStorage.getItem(legacyStorageKey);
-  return isThemeScheme(legacy) ? legacy : "radar";
+  return isThemeScheme(legacy) ? legacy : "base";
 }
 
 function getInitialMode(): ThemeMode {
@@ -40,7 +40,7 @@ function getInitialMode(): ThemeMode {
   if (isThemeMode(stored)) return stored;
   const legacy = window.localStorage.getItem(legacyStorageKey);
   if (legacy === "dark" || legacy === "dusk") return "dark";
-  if (legacy === "light" || legacy === "sage" || legacy === "ocean") return "light";
+  if (legacy === "light" || legacy === "base" || legacy === "sage" || legacy === "ocean") return "light";
   return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
 }
 

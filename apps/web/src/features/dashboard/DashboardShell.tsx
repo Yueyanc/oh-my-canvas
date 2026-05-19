@@ -43,12 +43,12 @@ export function DashboardShell({
   const [isSidebarExpanded, setIsSidebarExpanded] = React.useState(false);
 
   return (
-    <main className="h-dvh overflow-hidden bg-radar-canvas text-radar-ink" style={{ fontFamily }}>
+    <main className="h-dvh overflow-hidden bg-app-canvas text-app-ink" style={{ fontFamily }}>
       <div
         className={
           isSidebarExpanded
-            ? "grid h-full w-full grid-cols-[232px_minmax(0,1fr)] overflow-hidden bg-radar-canvas transition-[grid-template-columns] duration-300 ease-out"
-            : "grid h-full w-full grid-cols-[72px_minmax(0,1fr)] overflow-hidden bg-radar-canvas transition-[grid-template-columns] duration-300 ease-out"
+            ? "grid h-full w-full grid-cols-[232px_minmax(0,1fr)] overflow-hidden bg-app-canvas transition-[grid-template-columns] duration-300 ease-out"
+            : "grid h-full w-full grid-cols-[72px_minmax(0,1fr)] overflow-hidden bg-app-canvas transition-[grid-template-columns] duration-300 ease-out"
         }
       >
         <DashboardRail activeRoute={route} isExpanded={isSidebarExpanded} onRouteChange={onRouteChange} />
@@ -94,10 +94,10 @@ function DashboardRoutes({ onRouteReset }: { onRouteReset: () => void }) {
 
 function RoutePlaceholder({ route, onRouteReset }: { route: AppRoute; onRouteReset: () => void }) {
   return (
-    <section className="flex min-h-[32rem] w-full items-center justify-center rounded-panel border border-dashed border-radar-line bg-radar-surface/70 px-4 text-center">
+    <section className="flex min-h-[32rem] w-full items-center justify-center rounded-panel border border-dashed border-app-line bg-app-surface/70 px-4 text-center">
       <div>
-        <p className="text-sm font-medium text-radar-ink">{route.label}模块准备中</p>
-        <p className="mt-1 text-xs text-radar-ink-muted">这是模板占位页，你可以在这里接入自己的业务模块。</p>
+        <p className="text-sm font-medium text-app-ink">{route.label}模块准备中</p>
+        <p className="mt-1 text-xs text-app-ink-muted">这是模板占位页，你可以在这里接入自己的功能模块。</p>
         <button
           className="mt-4 inline-flex h-10 items-center justify-center rounded-full bg-primary px-4 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
           onClick={onRouteReset}

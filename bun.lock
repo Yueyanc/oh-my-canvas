@@ -3,7 +3,7 @@
   "configVersion": 1,
   "workspaces": {
     "": {
-      "name": "information-radar",
+      "name": "project-template",
       "dependencies": {
         "@hono/zod-validator": "^0.4.3",
         "@radix-ui/react-select": "^2.2.6",
@@ -32,10 +32,10 @@
       },
     },
     "apps/api": {
-      "name": "@information/api",
+      "name": "@template/api",
     },
     "apps/web": {
-      "name": "@information/web",
+      "name": "@template/web",
       "dependencies": {
         "@hugeicons/core-free-icons": "^4.1.1",
         "@hugeicons/react": "^1.1.6",
@@ -50,10 +50,10 @@
       },
     },
     "packages/db": {
-      "name": "@information/db",
+      "name": "@template/db",
     },
     "packages/logger": {
-      "name": "@information/logger",
+      "name": "@template/logger",
     },
   },
   "packages": {
@@ -171,13 +171,13 @@
 
     "@hugeicons/react": ["@hugeicons/react@1.1.6", "https://registry.npmmirror.com/@hugeicons/react/-/react-1.1.6.tgz", { "peerDependencies": { "react": ">=16.0.0" } }, "sha512-c2LhXJMAW5wN1pC/smBXG0YPqUON6ceR/ZdXHCjEI9KvB+hjtqYjmzIxok5hAQOeXGz0WtORgCQMzqewFKAZwg=="],
 
-    "@information/api": ["@information/api@workspace:apps/api"],
+    "@template/api": ["@template/api@workspace:apps/api"],
 
-    "@information/db": ["@information/db@workspace:packages/db"],
+    "@template/db": ["@template/db@workspace:packages/db"],
 
-    "@information/logger": ["@information/logger@workspace:packages/logger"],
+    "@template/logger": ["@template/logger@workspace:packages/logger"],
 
-    "@information/web": ["@information/web@workspace:apps/web"],
+    "@template/web": ["@template/web@workspace:apps/web"],
 
     "@jridgewell/gen-mapping": ["@jridgewell/gen-mapping@0.3.13", "https://registry.npmmirror.com/@jridgewell/gen-mapping/-/gen-mapping-0.3.13.tgz", { "dependencies": { "@jridgewell/sourcemap-codec": "^1.5.0", "@jridgewell/trace-mapping": "^0.3.24" } }, "sha512-2kkt/7niJ6MgEPxF0bYdQ6etZaA+fQvDcLKckhy1yIQOzaoKjBBjSj63/aLVjYE3qhRt5dvM+uUyfCg6UKCBbA=="],
 

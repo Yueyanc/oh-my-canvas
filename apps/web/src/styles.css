@@ -21,276 +21,276 @@
   --color-destructive-foreground: hsl(var(--destructive-foreground));
   --color-card: hsl(var(--card));
   --color-card-foreground: hsl(var(--card-foreground));
-  --color-radar-canvas: hsl(var(--radar-canvas));
-  --color-radar-surface: hsl(var(--radar-surface));
-  --color-radar-surface-soft: hsl(var(--radar-surface-soft));
-  --color-radar-ink: hsl(var(--radar-ink));
-  --color-radar-ink-soft: hsl(var(--radar-ink-soft));
-  --color-radar-ink-muted: hsl(var(--radar-ink-muted));
-  --color-radar-line: hsl(var(--radar-line));
-  --color-radar-line-strong: hsl(var(--radar-line-strong));
-  --color-radar-primary: hsl(var(--radar-primary));
-  --color-radar-primary-ink: hsl(var(--radar-primary-ink));
-  --color-radar-accent: hsl(var(--radar-accent));
-  --color-radar-accent-ink: hsl(var(--radar-accent-ink));
-  --color-radar-lime: hsl(var(--radar-lime));
-  --color-radar-lime-ink: hsl(var(--radar-lime-ink));
-  --color-radar-blue: hsl(var(--radar-blue));
-  --color-radar-blue-ink: hsl(var(--radar-blue-ink));
-  --color-radar-purple: hsl(var(--radar-purple));
-  --color-radar-purple-ink: hsl(var(--radar-purple-ink));
-  --color-radar-pink: hsl(var(--radar-pink));
-  --color-radar-pink-ink: hsl(var(--radar-pink-ink));
-  --color-radar-yellow: hsl(var(--radar-yellow));
-  --color-radar-yellow-ink: hsl(var(--radar-yellow-ink));
+  --color-app-canvas: hsl(var(--app-canvas));
+  --color-app-surface: hsl(var(--app-surface));
+  --color-app-surface-soft: hsl(var(--app-surface-soft));
+  --color-app-ink: hsl(var(--app-ink));
+  --color-app-ink-soft: hsl(var(--app-ink-soft));
+  --color-app-ink-muted: hsl(var(--app-ink-muted));
+  --color-app-line: hsl(var(--app-line));
+  --color-app-line-strong: hsl(var(--app-line-strong));
+  --color-app-primary: hsl(var(--app-primary));
+  --color-app-primary-ink: hsl(var(--app-primary-ink));
+  --color-app-accent: hsl(var(--app-accent));
+  --color-app-accent-ink: hsl(var(--app-accent-ink));
+  --color-app-lime: hsl(var(--app-lime));
+  --color-app-lime-ink: hsl(var(--app-lime-ink));
+  --color-app-blue: hsl(var(--app-blue));
+  --color-app-blue-ink: hsl(var(--app-blue-ink));
+  --color-app-purple: hsl(var(--app-purple));
+  --color-app-purple-ink: hsl(var(--app-purple-ink));
+  --color-app-pink: hsl(var(--app-pink));
+  --color-app-pink-ink: hsl(var(--app-pink-ink));
+  --color-app-yellow: hsl(var(--app-yellow));
+  --color-app-yellow-ink: hsl(var(--app-yellow-ink));
   --radius-lg: var(--radius);
   --radius-md: calc(var(--radius) - 2px);
   --radius-sm: calc(var(--radius) - 4px);
-  --radius-control: var(--radar-radius-control);
-  --radius-card: var(--radar-radius-card);
-  --radius-panel: var(--radar-radius-panel);
-  --shadow-claude: var(--radar-shadow-card);
-  --shadow-card: var(--radar-shadow-card);
-  --shadow-popover: var(--radar-shadow-popover);
+  --radius-control: var(--app-radius-control);
+  --radius-card: var(--app-radius-card);
+  --radius-panel: var(--app-radius-panel);
+  --shadow-claude: var(--app-shadow-card);
+  --shadow-card: var(--app-shadow-card);
+  --shadow-popover: var(--app-shadow-popover);
 }
 
 @layer base {
   :root {
-    --radar-canvas: 48 42% 95%;
-    --radar-surface: 0 0% 100%;
-    --radar-surface-soft: 48 30% 93%;
-    --radar-ink: 84 8% 13%;
-    --radar-ink-soft: 78 5% 45%;
-    --radar-ink-muted: 75 5% 63%;
-    --radar-line: 60 12% 86%;
-    --radar-line-strong: 65 8% 76%;
-    --radar-primary: 84 8% 13%;
-    --radar-primary-ink: 73 100% 72%;
-    --radar-accent: 73 100% 72%;
-    --radar-accent-ink: 82 18% 12%;
-    --radar-lime: 73 100% 72%;
-    --radar-lime-ink: 82 18% 12%;
-    --radar-blue: 217 100% 92%;
-    --radar-blue-ink: 212 55% 35%;
-    --radar-purple: 264 100% 92%;
-    --radar-purple-ink: 265 45% 34%;
-    --radar-pink: 318 100% 91%;
-    --radar-pink-ink: 322 42% 36%;
-    --radar-yellow: 59 100% 88%;
-    --radar-yellow-ink: 53 36% 31%;
-    --radar-danger: 4 65% 45%;
-    --radar-danger-ink: 60 33% 97%;
-    --radar-shadow-card: 0 12px 36px rgb(35 38 32 / 0.06);
-    --radar-shadow-popover: 0 18px 56px rgb(35 38 32 / 0.12);
-    --radar-radius-control: 0.75rem;
-    --radar-radius-card: 1.625rem;
-    --radar-radius-panel: 1.875rem;
+    --app-canvas: 48 42% 95%;
+    --app-surface: 0 0% 100%;
+    --app-surface-soft: 48 30% 93%;
+    --app-ink: 84 8% 13%;
+    --app-ink-soft: 78 5% 45%;
+    --app-ink-muted: 75 5% 63%;
+    --app-line: 60 12% 86%;
+    --app-line-strong: 65 8% 76%;
+    --app-primary: 84 8% 13%;
+    --app-primary-ink: 73 100% 72%;
+    --app-accent: 73 100% 72%;
+    --app-accent-ink: 82 18% 12%;
+    --app-lime: 73 100% 72%;
+    --app-lime-ink: 82 18% 12%;
+    --app-blue: 217 100% 92%;
+    --app-blue-ink: 212 55% 35%;
+    --app-purple: 264 100% 92%;
+    --app-purple-ink: 265 45% 34%;
+    --app-pink: 318 100% 91%;
+    --app-pink-ink: 322 42% 36%;
+    --app-yellow: 59 100% 88%;
+    --app-yellow-ink: 53 36% 31%;
+    --app-danger: 4 65% 45%;
+    --app-danger-ink: 60 33% 97%;
+    --app-shadow-card: 0 12px 36px rgb(35 38 32 / 0.06);
+    --app-shadow-popover: 0 18px 56px rgb(35 38 32 / 0.12);
+    --app-radius-control: 0.75rem;
+    --app-radius-card: 1.625rem;
+    --app-radius-panel: 1.875rem;
 
-    --background: var(--radar-canvas);
-    --foreground: var(--radar-ink);
-    --card: var(--radar-surface);
-    --card-foreground: var(--radar-ink);
-    --primary: var(--radar-primary);
-    --primary-foreground: var(--radar-primary-ink);
-    --secondary: var(--radar-surface-soft);
-    --secondary-foreground: var(--radar-ink);
-    --muted: var(--radar-surface-soft);
-    --muted-foreground: var(--radar-ink-soft);
-    --accent: var(--radar-accent);
-    --accent-foreground: var(--radar-accent-ink);
-    --destructive: var(--radar-danger);
-    --destructive-foreground: var(--radar-danger-ink);
-    --border: var(--radar-line);
-    --input: var(--radar-line);
-    --ring: var(--radar-accent);
-    --radius: var(--radar-radius-control);
+    --background: var(--app-canvas);
+    --foreground: var(--app-ink);
+    --card: var(--app-surface);
+    --card-foreground: var(--app-ink);
+    --primary: var(--app-primary);
+    --primary-foreground: var(--app-primary-ink);
+    --secondary: var(--app-surface-soft);
+    --secondary-foreground: var(--app-ink);
+    --muted: var(--app-surface-soft);
+    --muted-foreground: var(--app-ink-soft);
+    --accent: var(--app-accent);
+    --accent-foreground: var(--app-accent-ink);
+    --destructive: var(--app-danger);
+    --destructive-foreground: var(--app-danger-ink);
+    --border: var(--app-line);
+    --input: var(--app-line);
+    --ring: var(--app-accent);
+    --radius: var(--app-radius-control);
   }
 
   .dark {
-    --radar-canvas: 84 10% 8%;
-    --radar-surface: 82 9% 13%;
-    --radar-surface-soft: 82 8% 18%;
-    --radar-ink: 58 34% 94%;
-    --radar-ink-soft: 62 14% 72%;
-    --radar-ink-muted: 68 9% 58%;
-    --radar-line: 78 8% 24%;
-    --radar-line-strong: 76 8% 34%;
-    --radar-primary: 73 100% 72%;
-    --radar-primary-ink: 82 18% 12%;
-    --radar-accent: 73 100% 72%;
-    --radar-accent-ink: 82 18% 12%;
-    --radar-lime: 73 100% 72%;
-    --radar-lime-ink: 82 18% 12%;
-    --radar-blue: 205 36% 24%;
-    --radar-blue-ink: 204 72% 80%;
-    --radar-purple: 264 30% 24%;
-    --radar-purple-ink: 264 78% 83%;
-    --radar-pink: 318 32% 24%;
-    --radar-pink-ink: 318 75% 82%;
-    --radar-yellow: 55 34% 24%;
-    --radar-yellow-ink: 56 88% 82%;
-    --radar-danger: 4 70% 60%;
-    --radar-danger-ink: 60 33% 97%;
-    --radar-shadow-card: 0 14px 42px rgb(0 0 0 / 0.28);
-    --radar-shadow-popover: 0 22px 70px rgb(0 0 0 / 0.38);
+    --app-canvas: 84 10% 8%;
+    --app-surface: 82 9% 13%;
+    --app-surface-soft: 82 8% 18%;
+    --app-ink: 58 34% 94%;
+    --app-ink-soft: 62 14% 72%;
+    --app-ink-muted: 68 9% 58%;
+    --app-line: 78 8% 24%;
+    --app-line-strong: 76 8% 34%;
+    --app-primary: 73 100% 72%;
+    --app-primary-ink: 82 18% 12%;
+    --app-accent: 73 100% 72%;
+    --app-accent-ink: 82 18% 12%;
+    --app-lime: 73 100% 72%;
+    --app-lime-ink: 82 18% 12%;
+    --app-blue: 205 36% 24%;
+    --app-blue-ink: 204 72% 80%;
+    --app-purple: 264 30% 24%;
+    --app-purple-ink: 264 78% 83%;
+    --app-pink: 318 32% 24%;
+    --app-pink-ink: 318 75% 82%;
+    --app-yellow: 55 34% 24%;
+    --app-yellow-ink: 56 88% 82%;
+    --app-danger: 4 70% 60%;
+    --app-danger-ink: 60 33% 97%;
+    --app-shadow-card: 0 14px 42px rgb(0 0 0 / 0.28);
+    --app-shadow-popover: 0 22px 70px rgb(0 0 0 / 0.38);
 
-    --background: var(--radar-canvas);
-    --foreground: var(--radar-ink);
-    --card: var(--radar-surface);
-    --card-foreground: var(--radar-ink);
-    --primary: var(--radar-primary);
-    --primary-foreground: var(--radar-primary-ink);
-    --secondary: var(--radar-surface-soft);
-    --secondary-foreground: var(--radar-ink);
-    --muted: var(--radar-surface-soft);
-    --muted-foreground: var(--radar-ink-soft);
-    --accent: var(--radar-accent);
-    --accent-foreground: var(--radar-accent-ink);
-    --destructive: var(--radar-danger);
-    --destructive-foreground: var(--radar-danger-ink);
-    --border: var(--radar-line);
-    --input: var(--radar-line);
-    --ring: var(--radar-accent);
+    --background: var(--app-canvas);
+    --foreground: var(--app-ink);
+    --card: var(--app-surface);
+    --card-foreground: var(--app-ink);
+    --primary: var(--app-primary);
+    --primary-foreground: var(--app-primary-ink);
+    --secondary: var(--app-surface-soft);
+    --secondary-foreground: var(--app-ink);
+    --muted: var(--app-surface-soft);
+    --muted-foreground: var(--app-ink-soft);
+    --accent: var(--app-accent);
+    --accent-foreground: var(--app-accent-ink);
+    --destructive: var(--app-danger);
+    --destructive-foreground: var(--app-danger-ink);
+    --border: var(--app-line);
+    --input: var(--app-line);
+    --ring: var(--app-accent);
   }
 
   :root[data-theme="sage"] {
-    --radar-canvas: 82 34% 93%;
-    --radar-surface: 70 38% 98%;
-    --radar-surface-soft: 83 30% 88%;
-    --radar-ink: 92 12% 16%;
-    --radar-ink-soft: 92 8% 42%;
-    --radar-ink-muted: 92 7% 58%;
-    --radar-line: 88 18% 78%;
-    --radar-line-strong: 86 16% 67%;
-    --radar-primary: 99 34% 34%;
-    --radar-primary-ink: 84 46% 96%;
-    --radar-accent: 85 68% 63%;
-    --radar-accent-ink: 94 24% 14%;
-    --radar-lime: 78 100% 68%;
-    --radar-lime-ink: 90 22% 12%;
-    --radar-shadow-card: 0 12px 36px rgb(44 58 37 / 0.08);
-    --radar-shadow-popover: 0 18px 56px rgb(44 58 37 / 0.14);
+    --app-canvas: 82 34% 93%;
+    --app-surface: 70 38% 98%;
+    --app-surface-soft: 83 30% 88%;
+    --app-ink: 92 12% 16%;
+    --app-ink-soft: 92 8% 42%;
+    --app-ink-muted: 92 7% 58%;
+    --app-line: 88 18% 78%;
+    --app-line-strong: 86 16% 67%;
+    --app-primary: 99 34% 34%;
+    --app-primary-ink: 84 46% 96%;
+    --app-accent: 85 68% 63%;
+    --app-accent-ink: 94 24% 14%;
+    --app-lime: 78 100% 68%;
+    --app-lime-ink: 90 22% 12%;
+    --app-shadow-card: 0 12px 36px rgb(44 58 37 / 0.08);
+    --app-shadow-popover: 0 18px 56px rgb(44 58 37 / 0.14);
   }
 
   :root[data-theme="sage"].dark {
-    --radar-canvas: 96 14% 10%;
-    --radar-surface: 96 12% 15%;
-    --radar-surface-soft: 96 11% 20%;
-    --radar-ink: 76 32% 92%;
-    --radar-ink-soft: 82 14% 72%;
-    --radar-ink-muted: 84 10% 58%;
-    --radar-line: 96 10% 26%;
-    --radar-line-strong: 96 10% 36%;
-    --radar-primary: 101 60% 66%;
-    --radar-primary-ink: 94 24% 13%;
-    --radar-accent: 101 60% 66%;
-    --radar-accent-ink: 94 24% 13%;
-    --radar-lime: 101 60% 66%;
-    --radar-lime-ink: 94 24% 13%;
-    --radar-shadow-card: 0 14px 42px rgb(0 0 0 / 0.26);
-    --radar-shadow-popover: 0 22px 70px rgb(0 0 0 / 0.36);
+    --app-canvas: 96 14% 10%;
+    --app-surface: 96 12% 15%;
+    --app-surface-soft: 96 11% 20%;
+    --app-ink: 76 32% 92%;
+    --app-ink-soft: 82 14% 72%;
+    --app-ink-muted: 84 10% 58%;
+    --app-line: 96 10% 26%;
+    --app-line-strong: 96 10% 36%;
+    --app-primary: 101 60% 66%;
+    --app-primary-ink: 94 24% 13%;
+    --app-accent: 101 60% 66%;
+    --app-accent-ink: 94 24% 13%;
+    --app-lime: 101 60% 66%;
+    --app-lime-ink: 94 24% 13%;
+    --app-shadow-card: 0 14px 42px rgb(0 0 0 / 0.26);
+    --app-shadow-popover: 0 22px 70px rgb(0 0 0 / 0.36);
 
-    --primary: var(--radar-primary);
-    --primary-foreground: var(--radar-primary-ink);
-    --accent: var(--radar-accent);
-    --accent-foreground: var(--radar-accent-ink);
-    --ring: var(--radar-accent);
+    --primary: var(--app-primary);
+    --primary-foreground: var(--app-primary-ink);
+    --accent: var(--app-accent);
+    --accent-foreground: var(--app-accent-ink);
+    --ring: var(--app-accent);
   }
 
   :root[data-theme="ocean"] {
-    --radar-canvas: 198 34% 93%;
-    --radar-surface: 196 38% 98%;
-    --radar-surface-soft: 196 28% 88%;
-    --radar-ink: 204 22% 15%;
-    --radar-ink-soft: 204 12% 42%;
-    --radar-ink-muted: 204 10% 59%;
-    --radar-line: 196 20% 78%;
-    --radar-line-strong: 198 18% 66%;
-    --radar-primary: 199 76% 36%;
-    --radar-primary-ink: 196 70% 97%;
-    --radar-accent: 188 82% 54%;
-    --radar-accent-ink: 199 42% 13%;
-    --radar-lime: 188 82% 54%;
-    --radar-lime-ink: 199 42% 13%;
-    --radar-shadow-card: 0 12px 36px rgb(36 58 66 / 0.08);
-    --radar-shadow-popover: 0 18px 56px rgb(36 58 66 / 0.14);
+    --app-canvas: 198 34% 93%;
+    --app-surface: 196 38% 98%;
+    --app-surface-soft: 196 28% 88%;
+    --app-ink: 204 22% 15%;
+    --app-ink-soft: 204 12% 42%;
+    --app-ink-muted: 204 10% 59%;
+    --app-line: 196 20% 78%;
+    --app-line-strong: 198 18% 66%;
+    --app-primary: 199 76% 36%;
+    --app-primary-ink: 196 70% 97%;
+    --app-accent: 188 82% 54%;
+    --app-accent-ink: 199 42% 13%;
+    --app-lime: 188 82% 54%;
+    --app-lime-ink: 199 42% 13%;
+    --app-shadow-card: 0 12px 36px rgb(36 58 66 / 0.08);
+    --app-shadow-popover: 0 18px 56px rgb(36 58 66 / 0.14);
   }
 
   :root[data-theme="ocean"].dark {
-    --radar-canvas: 204 20% 10%;
-    --radar-surface: 204 17% 15%;
-    --radar-surface-soft: 204 15% 21%;
-    --radar-ink: 198 30% 92%;
-    --radar-ink-soft: 198 16% 72%;
-    --radar-ink-muted: 198 12% 58%;
-    --radar-line: 204 14% 27%;
-    --radar-line-strong: 204 14% 38%;
-    --radar-primary: 190 86% 60%;
-    --radar-primary-ink: 205 44% 12%;
-    --radar-accent: 190 86% 60%;
-    --radar-accent-ink: 205 44% 12%;
-    --radar-lime: 190 86% 60%;
-    --radar-lime-ink: 205 44% 12%;
-    --radar-blue: 205 36% 24%;
-    --radar-blue-ink: 204 72% 80%;
-    --radar-shadow-card: 0 14px 42px rgb(0 0 0 / 0.26);
-    --radar-shadow-popover: 0 22px 70px rgb(0 0 0 / 0.36);
+    --app-canvas: 204 20% 10%;
+    --app-surface: 204 17% 15%;
+    --app-surface-soft: 204 15% 21%;
+    --app-ink: 198 30% 92%;
+    --app-ink-soft: 198 16% 72%;
+    --app-ink-muted: 198 12% 58%;
+    --app-line: 204 14% 27%;
+    --app-line-strong: 204 14% 38%;
+    --app-primary: 190 86% 60%;
+    --app-primary-ink: 205 44% 12%;
+    --app-accent: 190 86% 60%;
+    --app-accent-ink: 205 44% 12%;
+    --app-lime: 190 86% 60%;
+    --app-lime-ink: 205 44% 12%;
+    --app-blue: 205 36% 24%;
+    --app-blue-ink: 204 72% 80%;
+    --app-shadow-card: 0 14px 42px rgb(0 0 0 / 0.26);
+    --app-shadow-popover: 0 22px 70px rgb(0 0 0 / 0.36);
 
-    --primary: var(--radar-primary);
-    --primary-foreground: var(--radar-primary-ink);
-    --accent: var(--radar-accent);
-    --accent-foreground: var(--radar-accent-ink);
-    --ring: var(--radar-accent);
+    --primary: var(--app-primary);
+    --primary-foreground: var(--app-primary-ink);
+    --accent: var(--app-accent);
+    --accent-foreground: var(--app-accent-ink);
+    --ring: var(--app-accent);
   }
 
   :root[data-theme="dusk"] {
-    --radar-canvas: 268 32% 94%;
-    --radar-surface: 0 0% 100%;
-    --radar-surface-soft: 268 24% 91%;
-    --radar-ink: 268 18% 16%;
-    --radar-ink-soft: 268 10% 44%;
-    --radar-ink-muted: 268 8% 62%;
-    --radar-line: 268 16% 82%;
-    --radar-line-strong: 268 14% 70%;
-    --radar-primary: 274 48% 43%;
-    --radar-primary-ink: 268 72% 97%;
-    --radar-accent: 318 68% 62%;
-    --radar-accent-ink: 318 38% 14%;
-    --radar-lime: 318 68% 62%;
-    --radar-lime-ink: 318 38% 14%;
-    --radar-purple: 276 100% 92%;
-    --radar-purple-ink: 276 45% 34%;
-    --radar-shadow-card: 0 12px 36px rgb(50 38 68 / 0.08);
-    --radar-shadow-popover: 0 18px 56px rgb(50 38 68 / 0.14);
+    --app-canvas: 268 32% 94%;
+    --app-surface: 0 0% 100%;
+    --app-surface-soft: 268 24% 91%;
+    --app-ink: 268 18% 16%;
+    --app-ink-soft: 268 10% 44%;
+    --app-ink-muted: 268 8% 62%;
+    --app-line: 268 16% 82%;
+    --app-line-strong: 268 14% 70%;
+    --app-primary: 274 48% 43%;
+    --app-primary-ink: 268 72% 97%;
+    --app-accent: 318 68% 62%;
+    --app-accent-ink: 318 38% 14%;
+    --app-lime: 318 68% 62%;
+    --app-lime-ink: 318 38% 14%;
+    --app-purple: 276 100% 92%;
+    --app-purple-ink: 276 45% 34%;
+    --app-shadow-card: 0 12px 36px rgb(50 38 68 / 0.08);
+    --app-shadow-popover: 0 18px 56px rgb(50 38 68 / 0.14);
   }
 
   :root[data-theme="dusk"].dark {
-    --radar-canvas: 264 16% 11%;
-    --radar-surface: 264 13% 16%;
-    --radar-surface-soft: 264 12% 22%;
-    --radar-ink: 58 32% 93%;
-    --radar-ink-soft: 264 14% 74%;
-    --radar-ink-muted: 264 10% 60%;
-    --radar-line: 264 12% 28%;
-    --radar-line-strong: 264 12% 38%;
-    --radar-primary: 286 84% 72%;
-    --radar-primary-ink: 270 32% 12%;
-    --radar-accent: 318 86% 70%;
-    --radar-accent-ink: 318 38% 13%;
-    --radar-lime: 318 86% 70%;
-    --radar-lime-ink: 318 38% 13%;
-    --radar-blue: 248 28% 25%;
-    --radar-blue-ink: 246 84% 84%;
-    --radar-purple: 276 32% 26%;
-    --radar-purple-ink: 276 84% 84%;
-    --radar-shadow-card: 0 14px 42px rgb(0 0 0 / 0.24);
-    --radar-shadow-popover: 0 22px 70px rgb(0 0 0 / 0.34);
+    --app-canvas: 264 16% 11%;
+    --app-surface: 264 13% 16%;
+    --app-surface-soft: 264 12% 22%;
+    --app-ink: 58 32% 93%;
+    --app-ink-soft: 264 14% 74%;
+    --app-ink-muted: 264 10% 60%;
+    --app-line: 264 12% 28%;
+    --app-line-strong: 264 12% 38%;
+    --app-primary: 286 84% 72%;
+    --app-primary-ink: 270 32% 12%;
+    --app-accent: 318 86% 70%;
+    --app-accent-ink: 318 38% 13%;
+    --app-lime: 318 86% 70%;
+    --app-lime-ink: 318 38% 13%;
+    --app-blue: 248 28% 25%;
+    --app-blue-ink: 246 84% 84%;
+    --app-purple: 276 32% 26%;
+    --app-purple-ink: 276 84% 84%;
+    --app-shadow-card: 0 14px 42px rgb(0 0 0 / 0.24);
+    --app-shadow-popover: 0 22px 70px rgb(0 0 0 / 0.34);
 
-    --primary: var(--radar-primary);
-    --primary-foreground: var(--radar-primary-ink);
-    --accent: var(--radar-accent);
-    --accent-foreground: var(--radar-accent-ink);
-    --ring: var(--radar-accent);
+    --primary: var(--app-primary);
+    --primary-foreground: var(--app-primary-ink);
+    --accent: var(--app-accent);
+    --accent-foreground: var(--app-accent-ink);
+    --ring: var(--app-accent);
   }
 
   * {
@@ -344,16 +344,16 @@
 @layer utilities {
   .login-field {
     background:
-      linear-gradient(115deg, hsl(var(--radar-surface) / 0.08), transparent 38%),
-      radial-gradient(circle at 50% 42%, hsl(var(--radar-surface) / 0.02), transparent 34%),
+      linear-gradient(115deg, hsl(var(--app-surface) / 0.08), transparent 38%),
+      radial-gradient(circle at 50% 42%, hsl(var(--app-surface) / 0.02), transparent 34%),
       repeating-linear-gradient(
         90deg,
-        hsl(var(--radar-line) / 0.11) 0 1px,
+        hsl(var(--app-line) / 0.11) 0 1px,
         transparent 1px 72px
       ),
       repeating-linear-gradient(
         0deg,
-        hsl(var(--radar-line) / 0.08) 0 1px,
+        hsl(var(--app-line) / 0.08) 0 1px,
         transparent 1px 72px
       );
     backdrop-filter: blur(18px) saturate(1.12);

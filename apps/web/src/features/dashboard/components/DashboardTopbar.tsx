@@ -97,7 +97,7 @@ export function DashboardTopbar({
         <div className="flex min-w-0 items-center">
           <button
             aria-label={isSidebarExpanded ? "收起侧边栏" : "展开侧边栏"}
-            className="flex h-10 w-10 items-center justify-center rounded-full text-radar-ink-muted transition-colors duration-200 hover:bg-radar-surface hover:text-radar-ink"
+            className="flex h-10 w-10 items-center justify-center rounded-full text-app-ink-muted transition-colors duration-200 hover:bg-app-surface hover:text-app-ink"
             onClick={onSidebarToggle}
             type="button"
           >
@@ -127,7 +127,7 @@ export function DashboardTopbar({
                   <AnimatedMenu className="w-44">
                     {fontOptions.map((option) => (
                       <button
-                        className="flex w-full items-center justify-between gap-3 whitespace-nowrap rounded-xl px-3 py-2 text-left text-radar-ink-soft transition-colors duration-200 hover:bg-radar-surface-soft hover:text-radar-ink"
+                        className="flex w-full items-center justify-between gap-3 whitespace-nowrap rounded-xl px-3 py-2 text-left text-app-ink-soft transition-colors duration-200 hover:bg-app-surface-soft hover:text-app-ink"
                         key={option.key}
                         onClick={() => {
                           onFontChange(option.key);
@@ -164,7 +164,7 @@ export function DashboardTopbar({
                   <AnimatedMenu className="w-32">
                     {["中文", "English", "日本語"].map((option) => (
                       <button
-                        className="flex w-full items-center justify-between gap-3 whitespace-nowrap rounded-xl px-3 py-2 text-left text-radar-ink-soft transition-colors duration-200 hover:bg-radar-surface-soft hover:text-radar-ink"
+                        className="flex w-full items-center justify-between gap-3 whitespace-nowrap rounded-xl px-3 py-2 text-left text-app-ink-soft transition-colors duration-200 hover:bg-app-surface-soft hover:text-app-ink"
                         key={option}
                         onClick={() => {
                           setLanguage(option);
@@ -204,7 +204,7 @@ export function DashboardTopbar({
                   <AnimatedMenu className="w-44">
                     {themeOptions.map((option) => (
                       <button
-                        className="flex w-full items-center justify-between gap-3 whitespace-nowrap rounded-xl px-3 py-2 text-left text-radar-ink-soft transition-colors duration-200 hover:bg-radar-surface-soft hover:text-radar-ink"
+                        className="flex w-full items-center justify-between gap-3 whitespace-nowrap rounded-xl px-3 py-2 text-left text-app-ink-soft transition-colors duration-200 hover:bg-app-surface-soft hover:text-app-ink"
                         key={option.key}
                         onClick={(event) => {
                           setIsThemeMenuOpen(false);
@@ -217,7 +217,7 @@ export function DashboardTopbar({
                         type="button"
                       >
                         <span className="flex items-center gap-2">
-                          <span className={`h-3.5 w-3.5 rounded-full border border-radar-line ${option.swatch}`} />
+                          <span className={`h-3.5 w-3.5 rounded-full border border-app-line ${option.swatch}`} />
                           {option.label}
                         </span>
                         {option.key === themeScheme ? (
@@ -257,7 +257,7 @@ export function DashboardTopbar({
                 {isUserMenuOpen ? (
                   <AnimatedMenu className="w-[11.5rem] min-w-[11.5rem]" role="menu">
                     <button
-                      className="flex w-full items-center gap-2 whitespace-nowrap rounded-xl px-3 py-2 text-left text-radar-ink-soft transition-colors duration-200 hover:bg-radar-surface-soft hover:text-radar-ink"
+                      className="flex w-full items-center gap-2 whitespace-nowrap rounded-xl px-3 py-2 text-left text-app-ink-soft transition-colors duration-200 hover:bg-app-surface-soft hover:text-app-ink"
                       onClick={() => {
                         setIsUserMenuOpen(false);
                         setIsAccountPanelOpen(true);
@@ -269,7 +269,7 @@ export function DashboardTopbar({
                       账户设置
                     </button>
                     <button
-                      className="flex w-full items-center gap-2 whitespace-nowrap rounded-xl px-3 py-2 text-left text-radar-ink-soft transition-colors duration-200 hover:bg-radar-surface-soft hover:text-radar-ink"
+                      className="flex w-full items-center gap-2 whitespace-nowrap rounded-xl px-3 py-2 text-left text-app-ink-soft transition-colors duration-200 hover:bg-app-surface-soft hover:text-app-ink"
                       onClick={() => {
                         setIsUserMenuOpen(false);
                         onLogout();
@@ -322,8 +322,8 @@ function TopbarIconButton({
     <button
       aria-label={ariaLabel}
       aria-pressed={isActive || undefined}
-      className={`relative h-10 w-10 items-center justify-center rounded-full text-radar-ink-muted transition-colors duration-200 hover:bg-radar-surface-soft hover:text-radar-ink ${
-        isActive ? "bg-radar-surface-soft text-radar-ink" : ""
+      className={`relative h-10 w-10 items-center justify-center rounded-full text-app-ink-muted transition-colors duration-200 hover:bg-app-surface-soft hover:text-app-ink ${
+        isActive ? "bg-app-surface-soft text-app-ink" : ""
       } ${className}`}
       onClick={onClick}
       type="button"
@@ -349,7 +349,7 @@ function AnimatedMenu({
 }) {
   return (
     <motion.div
-      className={`absolute right-0 z-50 mt-2 overflow-hidden rounded-2xl border border-radar-line bg-radar-surface p-1 text-sm shadow-popover ${
+      className={`absolute right-0 z-50 mt-2 overflow-hidden rounded-2xl border border-app-line bg-app-surface p-1 text-sm shadow-popover ${
         className ?? ""
       }`}
       initial={{ opacity: 0, y: -4, scale: 0.96 }}
@@ -459,7 +459,7 @@ function AccountPanel({
 
   return (
     <motion.div
-      className="fixed inset-0 z-[60] flex items-center justify-center bg-radar-ink/20 px-4 backdrop-blur-sm"
+      className="fixed inset-0 z-[60] flex items-center justify-center bg-app-ink/20 px-4 backdrop-blur-sm"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
@@ -472,20 +472,20 @@ function AccountPanel({
         animate={{ opacity: 1, y: 0, scale: 1 }}
         exit={{ opacity: 0, y: 10, scale: 0.985 }}
         transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
-        className="w-full max-w-[36rem] rounded-3xl border border-white/70 bg-radar-surface/95 p-6 shadow-popover"
+        className="w-full max-w-[36rem] rounded-3xl border border-white/70 bg-app-surface/95 p-6 shadow-popover"
         onMouseDown={(event) => event.stopPropagation()}
       >
         <div className="flex items-start justify-between gap-4">
           <div className="flex items-center gap-3">
             <AvatarPreview avatarUrl={profileAvatarUrl.trim() || null} size="lg" />
             <div>
-              <p className="text-xs font-medium uppercase tracking-[0.18em] text-radar-ink-muted">ACCOUNT</p>
-              <h2 className="mt-1 text-2xl font-semibold text-radar-ink">账户设置</h2>
+              <p className="text-xs font-medium uppercase tracking-[0.18em] text-app-ink-muted">ACCOUNT</p>
+              <h2 className="mt-1 text-2xl font-semibold text-app-ink">账户设置</h2>
             </div>
           </div>
           <button
             aria-label="关闭账户设置"
-            className="flex h-10 w-10 items-center justify-center rounded-full text-radar-ink-muted transition-[background-color,color,transform] duration-200 hover:bg-radar-surface-soft hover:text-radar-ink active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+            className="flex h-10 w-10 items-center justify-center rounded-full text-app-ink-muted transition-[background-color,color,transform] duration-200 hover:bg-app-surface-soft hover:text-app-ink active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
             onClick={onClose}
             type="button"
           >
@@ -497,7 +497,7 @@ function AccountPanel({
           <TabsList className="relative grid w-full grid-cols-2 overflow-hidden">
             <motion.span
               aria-hidden="true"
-              className="absolute bottom-1 left-1 top-1 w-[calc(50%-0.25rem)] rounded-full bg-radar-surface shadow-card"
+              className="absolute bottom-1 left-1 top-1 w-[calc(50%-0.25rem)] rounded-full bg-app-surface shadow-card"
               animate={{ x: activeTab === "password" ? "100%" : "0%" }}
               transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
             />
@@ -514,13 +514,13 @@ function AccountPanel({
           <TabsContent value="profile">
             <form className="space-y-4" onSubmit={saveProfile}>
               <div>
-                <div className="flex items-center gap-2 text-sm font-medium text-radar-ink">
+                <div className="flex items-center gap-2 text-sm font-medium text-app-ink">
                   <HugeiconsIcon icon={Camera01Icon} className="h-4 w-4 text-primary" />
                   资料
                 </div>
-                <p className="mt-1 text-sm text-radar-ink-muted">修改名称和头像地址。</p>
+                <p className="mt-1 text-sm text-app-ink-muted">修改名称和头像地址。</p>
               </div>
-              <label className="block text-sm text-radar-ink-soft">
+              <label className="block text-sm text-app-ink-soft">
                 用户名
                 <Input
                   className="mt-2 rounded-2xl bg-white/70"
@@ -529,7 +529,7 @@ function AccountPanel({
                   onChange={(event) => setProfileUsername(event.target.value)}
                 />
               </label>
-              <label className="block text-sm text-radar-ink-soft">
+              <label className="block text-sm text-app-ink-soft">
                 头像 URL
                 <Input
                   className="mt-2 rounded-2xl bg-white/70"
@@ -548,13 +548,13 @@ function AccountPanel({
           <TabsContent value="password">
             <form className="space-y-4" onSubmit={savePassword}>
               <div>
-                <div className="flex items-center gap-2 text-sm font-medium text-radar-ink">
+                <div className="flex items-center gap-2 text-sm font-medium text-app-ink">
                   <HugeiconsIcon icon={LockPasswordIcon} className="h-4 w-4 text-primary" />
                   密码
                 </div>
-                <p className="mt-1 text-sm text-radar-ink-muted">使用当前密码确认后更新。</p>
+                <p className="mt-1 text-sm text-app-ink-muted">使用当前密码确认后更新。</p>
               </div>
-              <label className="block text-sm text-radar-ink-soft">
+              <label className="block text-sm text-app-ink-soft">
                 当前密码
                 <Input
                   className="mt-2 rounded-2xl bg-white/70"
@@ -563,7 +563,7 @@ function AccountPanel({
                   onChange={(event) => setCurrentPassword(event.target.value)}
                 />
               </label>
-              <label className="block text-sm text-radar-ink-soft">
+              <label className="block text-sm text-app-ink-soft">
                 新密码
                 <Input
                   className="mt-2 rounded-2xl bg-white/70"
@@ -572,7 +572,7 @@ function AccountPanel({
                   onChange={(event) => setNewPassword(event.target.value)}
                 />
               </label>
-              <label className="block text-sm text-radar-ink-soft">
+              <label className="block text-sm text-app-ink-soft">
                 确认新密码
                 <Input
                   className="mt-2 rounded-2xl bg-white/70"

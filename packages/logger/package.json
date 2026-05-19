@@ -1,5 +1,5 @@
 {
-  "name": "@information/logger",
+  "name": "@template/logger",
   "type": "module",
   "private": true,
   "exports": {

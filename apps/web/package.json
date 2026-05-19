@@ -1,5 +1,5 @@
 {
-  "name": "@information/web",
+  "name": "@template/web",
   "type": "module",
   "private": true,
   "scripts": {
