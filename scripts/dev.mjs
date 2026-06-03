@@ -1,16 +1,35 @@
 import { spawn, spawnSync } from "node:child_process";
+import net from "node:net";
+
+const preferredApiPort = Number(process.env.PORT ?? 8787);
+const apiPort = await findAvailablePort(preferredApiPort);
+
+if (apiPort !== preferredApiPort) {
+  console.log(`[api] port ${preferredApiPort} is in use, trying ${apiPort}...`);
+}
 
 const commands = [
-  ["api", "bun run dev:api"],
-  ["web", "bun run dev:web"]
+  {
+    name: "api",
+    command: "bun run dev:api",
+    env: { ...process.env, PORT: String(apiPort) }
+  },
+  {
+    name: "web",
+    command: "bun run dev:web",
+    env: {
+      ...process.env,
+      VITE_API_PROXY_TARGET: `http://localhost:${apiPort}`
+    }
+  }
 ];
 
 let shuttingDown = false;
 
-const processes = commands.map(([name, command]) => {
+const processes = commands.map(({ name, command, env }) => {
   const child = spawn(command, {
     cwd: process.cwd(),
-    env: process.env,
+    env,
     shell: true,
     stdio: ["inherit", "pipe", "pipe"]
   });
@@ -47,4 +66,24 @@ function shutdown(code) {
     }
   }
   setTimeout(() => process.exit(code), 250);
+}
+
+async function findAvailablePort(startPort) {
+  for (let port = startPort; port < startPort + 100; port += 1) {
+    if (await canListen(port)) return port;
+  }
+
+  throw new Error(`No available API port found from ${startPort} to ${startPort + 99}`);
+}
+
+function canListen(port) {
+  return new Promise((resolve) => {
+    const server = net.createServer();
+
+    server.once("error", () => resolve(false));
+    server.once("listening", () => {
+      server.close(() => resolve(true));
+    });
+    server.listen(port);
+  });
 }
