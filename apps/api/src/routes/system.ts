@@ -6,7 +6,7 @@ export function createSystemRoutes() {
   routes.get("/health", (c) =>
     c.json({
       ok: true,
-      runtime: "bun",
+      runtime: typeof Bun === "undefined" ? "node" : "bun",
       time: new Date().toISOString()
     })
   );

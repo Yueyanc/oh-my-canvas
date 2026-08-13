@@ -1,7 +1,7 @@
 import { Hono } from "hono";
 import { zValidator } from "@hono/zod-validator";
 import { z } from "zod";
-import type { AppDb } from "@template/db";
+import type { AppDb } from "@oh-my-canvas/db/runtime";
 import {
   changePassword,
   ensureDefaultUser,

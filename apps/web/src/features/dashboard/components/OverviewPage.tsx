@@ -1,54 +1,59 @@
+import React from "react";
 import { HugeiconsIcon } from "@hugeicons/react";
 import {
+  ComputerIcon,
   DashboardSquare01Icon,
-  LockPasswordIcon,
-  Settings02Icon,
-  UserCircleIcon
+  Database01Icon,
+  ServerStack01Icon
 } from "@hugeicons/core-free-icons";
-
-const features = [
-  {
-    icon: UserCircleIcon,
-    title: "账号登录",
-    description: "内置默认账号、Cookie 会话、账号资料编辑和退出登录流程。"
-  },
-  {
-    icon: LockPasswordIcon,
-    title: "权限保护",
-    description: "所有 /api 路由默认受会话保护，登录状态失效会自动回到登录页。"
-  },
-  {
-    icon: Settings02Icon,
-    title: "前端面板",
-    description: "保留侧边栏、顶栏、主题切换、字体切换和账号设置抽屉。"
-  }
-];
+import type { DesktopAppInfo } from "@oh-my-canvas/contracts";
 
 export function OverviewPage() {
+  const [appInfo, setAppInfo] = React.useState<DesktopAppInfo | null>(null);
+
+  React.useEffect(() => {
+    void window.ohMyCanvas?.getAppInfo().then(setAppInfo);
+  }, []);
+
+  const runtime = window.ohMyCanvas ? `Electron ${window.ohMyCanvas.versions.electron}` : "Web preview";
+  const statusItems = [
+    { icon: ComputerIcon, label: "运行环境", value: runtime },
+    { icon: ServerStack01Icon, label: "本地服务", value: "Ready" },
+    { icon: Database01Icon, label: "数据存储", value: "SQLite" }
+  ];
+
   return (
-    <section className="flex w-full flex-col gap-5">
-      <div className="rounded-card border border-app-line bg-app-surface/90 p-6 shadow-card">
+    <section className="flex w-full flex-col">
+      <header className="border-b border-app-line px-1 pb-8 pt-4">
         <div className="flex items-center gap-2 text-xs font-semibold uppercase text-app-ink-muted">
           <HugeiconsIcon icon={DashboardSquare01Icon} className="h-4 w-4 text-primary" />
-          Application Shell
+          Desktop workspace
         </div>
-        <h1 className="mt-3 text-[1.8rem] font-semibold leading-tight text-app-ink sm:text-3xl">
-          基础应用模板
-        </h1>
+        <h1 className="mt-3 text-[1.8rem] font-semibold leading-tight text-app-ink sm:text-3xl">Oh My Canvas</h1>
         <p className="mt-3 max-w-2xl text-sm leading-6 text-app-ink-soft">
-          这是一个干净的全栈应用基础壳，保留登录、权限、账户设置和基础后台面板。你可以从这里继续接入自己的功能模块。
+          桌面基础框架已就绪，业务工作区将在后续阶段接入。
         </p>
-      </div>
+      </header>
 
-      <div className="grid gap-3 lg:grid-cols-3">
-        {features.map((feature) => (
-          <article className="rounded-card border border-app-line bg-app-surface/90 p-4 shadow-card" key={feature.title}>
-            <HugeiconsIcon icon={feature.icon} className="h-5 w-5 text-primary" />
-            <h2 className="mt-3 text-sm font-semibold text-app-ink">{feature.title}</h2>
-            <p className="mt-2 text-sm leading-6 text-app-ink-soft">{feature.description}</p>
-          </article>
+      <div className="grid border-b border-app-line md:grid-cols-3">
+        {statusItems.map((item) => (
+          <div className="flex min-h-28 items-center gap-4 border-app-line px-1 py-5 md:border-r md:px-5 first:md:pl-1 last:md:border-r-0" key={item.label}>
+            <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-control bg-app-surface-soft text-primary">
+              <HugeiconsIcon icon={item.icon} className="h-5 w-5" />
+            </span>
+            <div className="min-w-0">
+              <p className="text-xs text-app-ink-muted">{item.label}</p>
+              <p className="mt-1 truncate text-sm font-semibold text-app-ink">{item.value}</p>
+            </div>
+          </div>
         ))}
       </div>
+
+      {appInfo ? (
+        <p className="px-1 py-5 text-xs text-app-ink-muted">
+          {appInfo.name} v{appInfo.version}
+        </p>
+      ) : null}
     </section>
   );
 }

@@ -2,10 +2,10 @@ import { createHash, randomBytes } from "node:crypto";
 import { deleteCookie, getCookie, setCookie } from "hono/cookie";
 import type { Context } from "hono";
 import { and, eq, gt, sql } from "drizzle-orm";
-import type { AppDb } from "@template/db";
-import { sessions, users } from "@template/db";
+import type { AppDb } from "@oh-my-canvas/db/runtime";
+import { sessions, users } from "@oh-my-canvas/db/runtime";
 
-const sessionCookie = "template_session";
+const sessionCookie = "oh_my_canvas_session";
 const sessionTtlSeconds = 7 * 24 * 60 * 60;
 
 export const authUsername = process.env.AUTH_USERNAME ?? process.env.ADMIN_USERNAME ?? "admin";

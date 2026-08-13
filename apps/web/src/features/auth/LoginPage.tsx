@@ -192,10 +192,10 @@ export function LoginPage({ onLogin }: { onLogin: (username: string, password: s
             <CardHeader className="space-y-0 p-8 pb-6 pr-28">
               <div className="space-y-2.5">
                 <CardTitle className="text-[1.7rem] font-semibold leading-tight tracking-normal text-app-ink">
-                  登录应用面板
+                  Oh My Canvas
                 </CardTitle>
                 <CardDescription className="max-w-[15rem] text-sm leading-6 text-app-ink-soft">
-                  输入账号密码，进入基础面板。
+                  登录桌面工作台。
                 </CardDescription>
               </div>
             </CardHeader>

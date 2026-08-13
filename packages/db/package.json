@@ -1,5 +1,5 @@
 {
-  "name": "@template/db",
+  "name": "@oh-my-canvas/db",
   "type": "module",
   "private": true,
   "exports": {

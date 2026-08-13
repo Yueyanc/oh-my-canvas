@@ -1,7 +1,7 @@
 import { Hono } from "hono";
 import { cors } from "hono/cors";
-import type { AppDb } from "@template/db";
-import { createChildLogger, errorMeta } from "@template/logger";
+import type { AppDb } from "@oh-my-canvas/db/runtime";
+import { createChildLogger, errorMeta } from "@oh-my-canvas/logger";
 import { requireAuth } from "./middleware/auth";
 import { requestLogger } from "./middleware/request-logger";
 import { createAuthRoutes } from "./routes/auth";
@@ -9,7 +9,7 @@ import { createSystemRoutes } from "./routes/system";
 
 const log = createChildLogger("api");
 
-export function createApiApp(db: AppDb) {
+export function createApiApp(db: AppDb, options: { includeNotFound?: boolean } = {}) {
   const app = new Hono();
 
   app.use("*", cors());
@@ -19,7 +19,9 @@ export function createApiApp(db: AppDb) {
   app.route("/api/auth", createAuthRoutes(db));
   app.route("/api", createSystemRoutes());
 
-  app.notFound((c) => c.json({ error: "Not found" }, 404));
+  if (options.includeNotFound !== false) {
+    app.notFound((c) => c.json({ error: "Not found" }, 404));
+  }
   app.onError((error, c) => {
     log.error("request failed", {
       ...errorMeta(error),

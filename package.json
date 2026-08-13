@@ -1,25 +1,38 @@
 {
-  "name": "project-template",
+  "name": "oh-my-canvas",
+  "version": "0.1.0",
+  "description": "Oh My Canvas desktop application foundation",
+  "author": "Yueyanc",
   "private": true,
   "type": "module",
+  "main": "apps/electron/dist/main.cjs",
   "workspaces": [
     "apps/*",
     "packages/*"
   ],
   "scripts": {
-    "dev": "node scripts/dev.mjs",
+    "dev": "bun run build:electron && node scripts/dev.mjs",
     "dev:api": "bun --hot apps/api/src/index.ts",
     "dev:web": "bun --cwd apps/web dev",
+    "dev:electron": "electron apps/electron/dist/main.cjs",
     "db:generate": "drizzle-kit generate",
     "db:push": "drizzle-kit push",
+    "test": "bun test",
     "typecheck": "tsc --noEmit",
-    "build": "bun run --filter @template/web build"
+    "build:web": "bun run --filter @oh-my-canvas/web build",
+    "build:electron": "node scripts/build-electron.mjs",
+    "build": "bun run build:web && bun run build:electron",
+    "package": "bun run build && electron-builder --dir",
+    "dist": "bun run build && electron-builder"
   },
   "dependencies": {
+    "@hono/node-server": "^2.1.0",
     "@hono/zod-validator": "^0.4.3",
     "@radix-ui/react-select": "^2.2.6",
     "@radix-ui/react-slot": "^1.2.4",
     "@radix-ui/react-tabs": "^1.1.13",
+    "better-sqlite3": "^13.0.2",
+    "bcryptjs": "^3.0.3",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "drizzle-orm": "^0.38.4",
@@ -30,15 +43,51 @@
     "zod": "^3.24.1"
   },
   "devDependencies": {
-    "@libsql/client": "^0.17.3",
     "@tailwindcss/vite": "^4.2.4",
+    "@types/better-sqlite3": "^9.6.0",
     "@types/bun": "^1.1.16",
     "@types/react": "^18.3.18",
     "@types/react-dom": "^18.3.5",
     "@vitejs/plugin-react": "^4.3.4",
     "drizzle-kit": "^0.30.2",
+    "electron": "^43.2.0",
+    "electron-builder": "^26.15.3",
+    "esbuild": "^0.28.1",
     "tailwindcss": "^4.2.4",
     "typescript": "^5.7.2",
     "vite": "^6.0.7"
+  },
+  "build": {
+    "appId": "cn.yueyanc.ohmycanvas",
+    "productName": "Oh My Canvas",
+    "artifactName": "${productName}-${version}-${os}-${arch}.${ext}",
+    "directories": {
+      "output": "release"
+    },
+    "files": [
+      "apps/electron/dist/**/*",
+      "apps/web/dist/**/*",
+      "package.json"
+    ],
+    "asar": true,
+    "asarUnpack": [
+      "node_modules/better-sqlite3/**/*"
+    ],
+    "npmRebuild": true,
+    "mac": {
+      "category": "public.app-category.graphics-design",
+      "icon": "apps/web/src/assets/app-logo-512.png",
+      "target": [
+        "dmg",
+        "zip"
+      ]
+    },
+    "win": {
+      "target": "nsis"
+    },
+    "linux": {
+      "category": "Graphics",
+      "target": "AppImage"
+    }
   }
 }

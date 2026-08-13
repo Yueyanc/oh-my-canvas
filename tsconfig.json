@@ -10,10 +10,12 @@
     "jsx": "react-jsx",
     "baseUrl": ".",
     "paths": {
-      "@template/db": ["packages/db/src/index.ts"],
-      "@template/db/*": ["packages/db/src/*"],
-      "@template/logger": ["packages/logger/src/index.ts"],
-      "@template/logger/*": ["packages/logger/src/*"]
+      "@oh-my-canvas/db": ["packages/db/src/index.ts"],
+      "@oh-my-canvas/db/*": ["packages/db/src/*"],
+      "@oh-my-canvas/logger": ["packages/logger/src/index.ts"],
+      "@oh-my-canvas/logger/*": ["packages/logger/src/*"],
+      "@oh-my-canvas/contracts": ["packages/contracts/src/index.ts"],
+      "@oh-my-canvas/contracts/*": ["packages/contracts/src/*"]
     }
   },
   "include": ["apps", "packages", "drizzle.config.ts"]

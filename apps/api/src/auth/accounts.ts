@@ -1,6 +1,7 @@
 import { eq, sql } from "drizzle-orm";
-import type { AppDb, User } from "@template/db";
-import { users } from "@template/db";
+import bcrypt from "bcryptjs";
+import type { AppDb, User } from "@oh-my-canvas/db/runtime";
+import { users } from "@oh-my-canvas/db/runtime";
 
 export type PublicAccount = Pick<User, "id" | "username" | "avatarUrl">;
 
@@ -45,7 +46,7 @@ export async function verifyAccountPassword(db: AppDb, username: string, passwor
   await ensureAccountSchema(db);
   const user = await getAccountByUsername(db, username);
   if (!user) return null;
-  const isValid = await Bun.password.verify(password, user.passwordHash);
+  const isValid = await bcrypt.compare(password, user.passwordHash);
   return isValid ? toPublicAccount(user) : null;
 }
 
@@ -75,7 +76,7 @@ export async function changePassword(db: AppDb, userId: string, currentPassword:
   const [user] = await db.select().from(users).where(eq(users.id, userId)).limit(1);
   if (!user) throw new Error("Account not found");
 
-  const isValid = await Bun.password.verify(currentPassword, user.passwordHash);
+  const isValid = await bcrypt.compare(currentPassword, user.passwordHash);
   if (!isValid) throw new Error("Current password is incorrect");
 
   await db
@@ -93,7 +94,7 @@ async function getAccountByUsername(db: AppDb, username: string) {
 }
 
 async function hashPassword(password: string) {
-  return Bun.password.hash(password, { algorithm: "bcrypt", cost: 10 });
+  return bcrypt.hash(password, 10);
 }
 
 function toPublicAccount(user: User): PublicAccount {

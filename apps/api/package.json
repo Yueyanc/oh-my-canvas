@@ -1,5 +1,5 @@
 {
-  "name": "@template/api",
+  "name": "@oh-my-canvas/api",
   "type": "module",
   "private": true
 }

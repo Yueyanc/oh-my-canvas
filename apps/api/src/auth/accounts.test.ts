@@ -1,5 +1,5 @@
 import { expect, test } from "bun:test";
-import { createDb } from "@template/db";
+import { createDb } from "@oh-my-canvas/db";
 import {
   changePassword,
   ensureDefaultUser,

@@ -28,7 +28,7 @@ const consoleFormat = winston.format.combine(
 export const logger = winston.createLogger({
   level,
   defaultMeta: {
-    service: "project-template",
+    service: "oh-my-canvas",
     pid: process.pid
   },
   transports: [

@@ -1,0 +1,5 @@
+{
+  "name": "@oh-my-canvas/electron",
+  "private": true,
+  "type": "module"
+}

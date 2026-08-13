@@ -1,5 +1,5 @@
 import { createMiddleware } from "hono/factory";
-import { createChildLogger } from "@template/logger";
+import { createChildLogger } from "@oh-my-canvas/logger";
 
 const log = createChildLogger("api");
 

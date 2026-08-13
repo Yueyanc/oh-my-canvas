@@ -1,17 +1,17 @@
-# Application Shell
+# Oh My Canvas
 
-A minimal full-stack Bun application shell with:
+基于 `project-template` 搭建的 Electron 桌面应用基础架构。当前阶段只包含通用应用能力，不包含具体业务。
 
-- Hono API server
-- SQLite + Drizzle
-- Cookie-based authentication
-- Default admin account bootstrap
-- Protected API middleware
-- Vite React dashboard shell
-- Account profile and password settings
-- Theme, font, and sidebar controls
+## 技术栈
 
-## Quick Start
+- Electron 主进程与安全的 preload bridge
+- React + Vite 渲染进程
+- Hono 本地 API
+- SQLite + Drizzle 数据层
+- Bun monorepo
+- electron-builder 跨平台打包
+
+## 开始开发
 
 ```bash
 bun install
@@ -20,39 +20,31 @@ bun run db:push
 bun run dev
 ```
 
-Default login:
+`bun run dev` 会启动 Vite、Electron 和 Electron 内置的本地 API。默认登录账号为 `admin / admin123`。
 
-```txt
-admin / admin123
-```
-
-## Scripts
+## 常用命令
 
 ```bash
-bun run dev        # start API and web dev servers
-bun run dev:api    # API only
-bun run dev:web    # web only
-bun run db:push    # sync Drizzle schema to SQLite
-bun run typecheck  # TypeScript check
-bun run build      # production web build
+bun run dev             # Electron 桌面开发模式
+bun run dev:api         # 单独启动 Bun API
+bun run dev:web         # 单独启动 Web 渲染器
+bun run test            # 运行测试
+bun run typecheck       # TypeScript 类型检查
+bun run build           # 构建 Web 与 Electron
+bun run package         # 生成未封装桌面应用
+bun run dist            # 生成安装包
 ```
 
-## Structure
+## 目录
 
-```txt
-apps/api      Hono API, auth routes, session middleware
-apps/web      Vite React dashboard
-packages/db   Drizzle schema and SQLite client
-packages/logger shared logging
+```text
+apps/api          Hono API 与认证边界
+apps/electron     Electron 主进程和 preload
+apps/web          React 渲染进程
+packages/contracts 跨进程类型与 IPC 通道
+packages/db       SQLite/Drizzle 数据访问
+packages/logger   结构化日志
+scripts           开发编排与构建脚本
 ```
 
-## Environment
-
-```env
-DATABASE_URL=file:data/app.sqlite
-PORT=8787
-AUTH_USERNAME=admin
-AUTH_PASSWORD=admin123
-```
-
-All `/api/*` routes are protected by default except health and auth endpoints.
+详细边界和运行方式见 [架构文档](docs/architecture.md)。

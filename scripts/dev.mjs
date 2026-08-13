@@ -3,23 +3,33 @@ import net from "node:net";
 
 const preferredApiPort = Number(process.env.PORT ?? 8787);
 const apiPort = await findAvailablePort(preferredApiPort);
+const preferredWebPort = Number(process.env.VITE_PORT ?? 3000);
+const webPort = await findAvailablePort(preferredWebPort, new Set([apiPort]));
 
 if (apiPort !== preferredApiPort) {
   console.log(`[api] port ${preferredApiPort} is in use, trying ${apiPort}...`);
 }
+if (webPort !== preferredWebPort) {
+  console.log(`[web] port ${preferredWebPort} is in use, trying ${webPort}...`);
+}
 
 const commands = [
-  {
-    name: "api",
-    command: "bun run dev:api",
-    env: { ...process.env, PORT: String(apiPort) }
-  },
   {
     name: "web",
     command: "bun run dev:web",
     env: {
       ...process.env,
-      VITE_API_PROXY_TARGET: `http://localhost:${apiPort}`
+      VITE_API_PROXY_TARGET: `http://127.0.0.1:${apiPort}`,
+      VITE_PORT: String(webPort)
+    }
+  },
+  {
+    name: "electron",
+    command: "bun run dev:electron",
+    env: {
+      ...process.env,
+      ELECTRON_RENDERER_URL: `http://127.0.0.1:${webPort}`,
+      ELECTRON_API_PORT: String(apiPort)
     }
   }
 ];
@@ -68,8 +78,9 @@ function shutdown(code) {
   setTimeout(() => process.exit(code), 250);
 }
 
-async function findAvailablePort(startPort) {
+async function findAvailablePort(startPort, excludedPorts = new Set()) {
   for (let port = startPort; port < startPort + 100; port += 1) {
+    if (excludedPorts.has(port)) continue;
     if (await canListen(port)) return port;
   }
 

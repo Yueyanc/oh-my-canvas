@@ -96,8 +96,8 @@ function RoutePlaceholder({ route, onRouteReset }: { route: AppRoute; onRouteRes
   return (
     <section className="flex min-h-[32rem] w-full items-center justify-center rounded-panel border border-dashed border-app-line bg-app-surface/70 px-4 text-center">
       <div>
-        <p className="text-sm font-medium text-app-ink">{route.label}模块准备中</p>
-        <p className="mt-1 text-xs text-app-ink-muted">这是模板占位页，你可以在这里接入自己的功能模块。</p>
+        <p className="text-sm font-medium text-app-ink">{route.label}暂未配置</p>
+        <p className="mt-1 text-xs text-app-ink-muted">当前版本只保留桌面应用基础架构。</p>
         <button
           className="mt-4 inline-flex h-10 items-center justify-center rounded-full bg-primary px-4 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
           onClick={onRouteReset}

@@ -1,5 +1,5 @@
 {
-  "name": "@template/logger",
+  "name": "@oh-my-canvas/logger",
   "type": "module",
   "private": true,
   "exports": {

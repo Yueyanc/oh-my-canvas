@@ -11,7 +11,7 @@ export type AccountProfile = {
   avatarUrl: string | null;
 };
 
-export const unauthorizedEventName = "template:unauthorized";
+export const unauthorizedEventName = "oh-my-canvas:unauthorized";
 
 export class UnauthorizedError extends Error {
   constructor() {
